@@ -7,6 +7,8 @@
 
 package frc.robot.subsystems.drive;
 
+import static frc.lib.util.PhoenixUtil.*;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANdiConfiguration;
@@ -31,9 +33,6 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import frc.lib.Constants.SwerveConstants;
-
-import static frc.lib.util.PhoenixUtil.*;
-
 import java.util.Queue;
 
 /**

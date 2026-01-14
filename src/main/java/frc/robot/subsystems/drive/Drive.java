@@ -43,7 +43,6 @@ import frc.lib.Constants.SwerveConstants;
 import frc.lib.util.LocalADStarAK;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
-
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -56,10 +55,12 @@ public class Drive extends SubsystemBase {
       Math.max(
           Math.max(
               Math.hypot(SwerveConstants.FrontLeft.LocationX, SwerveConstants.FrontLeft.LocationY),
-              Math.hypot(SwerveConstants.FrontRight.LocationX, SwerveConstants.FrontRight.LocationY)),
+              Math.hypot(
+                  SwerveConstants.FrontRight.LocationX, SwerveConstants.FrontRight.LocationY)),
           Math.max(
               Math.hypot(SwerveConstants.BackLeft.LocationX, SwerveConstants.BackLeft.LocationY),
-              Math.hypot(SwerveConstants.BackRight.LocationX, SwerveConstants.BackRight.LocationY)));
+              Math.hypot(
+                  SwerveConstants.BackRight.LocationX, SwerveConstants.BackRight.LocationY)));
 
   // PathPlanner config constants
   private static final double ROBOT_MASS_KG = 74.088;
