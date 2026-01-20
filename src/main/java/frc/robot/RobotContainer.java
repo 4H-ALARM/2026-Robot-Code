@@ -16,8 +16,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.lib.constants.SwerveConstants;
 import frc.robot.commands.DriveCommands;
-import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -49,10 +49,10 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIOPigeon2(),
-                new ModuleIOTalonFX(TunerConstants.FrontLeft),
-                new ModuleIOTalonFX(TunerConstants.FrontRight),
-                new ModuleIOTalonFX(TunerConstants.BackLeft),
-                new ModuleIOTalonFX(TunerConstants.BackRight));
+                new ModuleIOTalonFX(SwerveConstants.FrontLeft),
+                new ModuleIOTalonFX(SwerveConstants.FrontRight),
+                new ModuleIOTalonFX(SwerveConstants.BackLeft),
+                new ModuleIOTalonFX(SwerveConstants.BackRight));
 
         vision =
             new Vision(
@@ -67,10 +67,10 @@ public class RobotContainer {
         drive =
             new Drive(
                 new GyroIO() {},
-                new ModuleIOSim(TunerConstants.FrontLeft),
-                new ModuleIOSim(TunerConstants.FrontRight),
-                new ModuleIOSim(TunerConstants.BackLeft),
-                new ModuleIOSim(TunerConstants.BackRight));
+                new ModuleIOSim(SwerveConstants.FrontLeft),
+                new ModuleIOSim(SwerveConstants.FrontRight),
+                new ModuleIOSim(SwerveConstants.BackLeft),
+                new ModuleIOSim(SwerveConstants.BackRight));
 
         vision =
             new Vision(
