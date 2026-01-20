@@ -6,6 +6,7 @@ package frc.robot.subsystems.shooter;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.enums.TargetEnum;
 
@@ -13,16 +14,21 @@ import frc.lib.enums.TargetEnum;
 public interface TurretIO {
     @AutoLog
     public static class TurretIOInputs {
-        Rotation2d turretRelativeAngleDegrees;
-        Rotation2d robotRelativeAngleDegrees;
+        double turretRelativeAngleDegrees;
+        double robotRelativeAngleDegrees;
         boolean isConnected;
         boolean isReady;
         TargetEnum target;
     }
 
-    public default void changeTarget(TargetEnum target) {}
+    public void changeTarget(TargetEnum target);
 
     public default boolean isAimed() {return true;}
+
+    public void toggleNeutral();
+    public void resetEncoder(); 
+    public void updateTuningValues();
+    public void turretPeriodic(Pose2d currentRobotPose);
 
     public default void updateInputs(TurretIOInputs inputs) {}
 }
