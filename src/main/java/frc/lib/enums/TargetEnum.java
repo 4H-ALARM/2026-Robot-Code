@@ -6,8 +6,8 @@ package frc.lib.enums;
 
 /** Add your docs here. */
 public enum TargetEnum {
-    HUB,
-    ALLIANCEZONELEFT,
-    ALLIANCEZONECENTER,
-    ALLIANCEZONERIGHT
+  HUB,
+  ALLIANCEZONELEFT,
+  ALLIANCEZONECENTER,
+  ALLIANCEZONERIGHT
 }

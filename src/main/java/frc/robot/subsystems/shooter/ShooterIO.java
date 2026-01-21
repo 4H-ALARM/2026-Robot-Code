@@ -4,26 +4,28 @@
 
 package frc.robot.subsystems.shooter;
 
-import org.littletonrobotics.junction.AutoLog;
-
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.units.measure.Velocity;
 import frc.lib.enums.TargetEnum;
+import org.littletonrobotics.junction.AutoLog;
 
 /** Add your docs here. */
 public interface ShooterIO {
-    @AutoLog
-    public class ShooterIOInputs {
-        public Rotation2d hoodAngleDegrees;
-        public double shooterVelocityRPM;
-        public boolean isReady;
-        public boolean shooterMotorIsConnected;
-        public boolean hoodMotorIsConnected;
-        TargetEnum target;
-    }
+  @AutoLog
+  public class ShooterIOInputs {
+    public Rotation2d hoodAngleDegrees;
+    public double shooterVelocityRPM;
+    public boolean isReady;
+    public boolean shooterMotorIsConnected;
+    public boolean hoodMotorIsConnected;
+    TargetEnum target;
+  }
 
-    public default Rotation2d getHoodAngle() {return new Rotation2d();};
-    public default void changeTarget(TargetEnum target) {}
+  public default Rotation2d getHoodAngle() {
+    return new Rotation2d();
+  }
+  ;
 
-    public default void updateInputs(ShooterIOInputs inputs) {}
+  public default void changeTarget(TargetEnum target) {}
+
+  public default void updateInputs(ShooterIOInputs inputs) {}
 }

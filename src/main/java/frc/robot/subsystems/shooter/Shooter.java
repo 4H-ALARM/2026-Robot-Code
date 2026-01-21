@@ -5,13 +5,26 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.drive.Drive;
 
 public class Shooter extends SubsystemBase {
-  /** Creates a new Shooter. */
-  public Shooter() {}
+
+  private TurretIOInputsAutoLogged turretInputs;
+  private TurretIO turret;
+  private ShooterIO shooter;
+  private Drive drive;
+
+  /** FIX DO NOT WANT TO IMPORT A WHOLE DRIVE */
+  public Shooter(ShooterIO shooter, TurretIO turret, Drive drive) {
+    this.turretInputs = new TurretIOInputsAutoLogged();
+    this.turret = turret;
+    this.shooter = shooter;
+    this.drive = drive;
+  }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    this.turret.updateInputs(turretInputs);
+    this.turret.turretPeriodic(drive.getPose());
   }
 }

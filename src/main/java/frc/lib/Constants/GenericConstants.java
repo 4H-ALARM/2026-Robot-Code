@@ -5,11 +5,14 @@
 package frc.lib.constants;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 
 /** Add your docs here. */
 public class GenericConstants {
-    public static final Pose2d HUB_POSE2D = new Pose2d();
-    public static final Pose2d LEFTALLIANCE = new Pose2d();
-    public static final Pose2d CENTERALLIANCE = new Pose2d();
-    public static final Pose2d RIGHTALLIANCE = new Pose2d();
+  public static final Pose2d HUB_POSE2D = new Pose2d();
+  public static final Pose2d LEFTALLIANCE = new Pose2d();
+  public static final Pose2d CENTERALLIANCE = new Pose2d();
+  public static final Pose2d RIGHTALLIANCE = new Pose2d();
+
+  public static final Translation2d turretPoseDifference = new Translation2d();
 }
