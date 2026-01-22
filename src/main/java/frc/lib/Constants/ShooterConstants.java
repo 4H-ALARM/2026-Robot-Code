@@ -21,12 +21,13 @@ public class ShooterConstants {
   public static final double turretks = 0.0;
   public static final double turretkv = 0.0;
   public static final double turretka = 1.0;
-  public static final double turretMaxAccel = 0.0;
-  public static final double turretMaxSpeed = 0.0;
-  public static final double turretJerk = 0.0;
+  public static final double turretMaxAccel = 50.0;
+  public static final double turretMaxSpeed = 50.0;
+  public static final double turretJerk = 50.0;
   public static final double turretRatio = 1.0;
-  public static final double maxRotation = 360.0;
-  public static final double turretTolerance = 5;
+  public static final double maxRotationPositive = 36000000.0;
+  public static final double maxRotationNegative = 36000000.0;
+  public static final double turretTolerance = 0;
   public static final double turretPoseOffset = 0.3175;
 
   public static final double shooterkp = 1.0;

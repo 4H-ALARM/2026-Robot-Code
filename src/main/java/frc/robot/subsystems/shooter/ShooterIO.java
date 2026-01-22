@@ -14,7 +14,6 @@ public interface ShooterIO {
   public class ShooterIOInputs {
     public Rotation2d hoodAngleDegrees;
     public double shooterVelocityRPM;
-    public boolean isReady;
     public boolean shooterMotorIsConnected;
     public boolean hoodMotorIsConnected;
     TargetEnum target;

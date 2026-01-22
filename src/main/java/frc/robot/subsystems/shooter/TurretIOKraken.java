@@ -54,6 +54,10 @@ public class TurretIOKraken implements TurretIO {
       new LoggedTunableNumber("Turret/hoodMaxSpeed", ShooterConstants.hoodMaxSpeed);
   private final LoggedTunableNumber turretJerk =
       new LoggedTunableNumber("Turret/jerk", ShooterConstants.turretJerk);
+  private final LoggedTunableNumber maxRotationPositive =
+      new LoggedTunableNumber("Turret/maxRotationPositive", ShooterConstants.maxRotationPositive);
+  private final LoggedTunableNumber maxRotationNegative =
+      new LoggedTunableNumber("Turret/maxRotationNegative", ShooterConstants.maxRotationNegative);
 
   public TurretIOKraken() {
     turretConfig =
@@ -83,6 +87,7 @@ public class TurretIOKraken implements TurretIO {
     neutralToggle = new ToggleHandler("Turret/NeutralModeToggle");
     unwinding = false;
     this.robotPose = new Pose2d();
+    this.targetEnum = TargetEnum.HUB;
     this.targetPose = GenericConstants.HUB_POSE2D;
   }
 
@@ -159,9 +164,9 @@ public class TurretIOKraken implements TurretIO {
   public Rotation2d getTargetTurretAngle(Pose2d pose) {
     double y = targetPose.getY() - pose.getY();
     double x = targetPose.getX() - pose.getX();
-    double totalangleradians = Math.atan(y / x);
+    double totalangleradians = Math.atan2(y, x);
 
-    return Rotation2d.fromRadians(totalangleradians - pose.getRotation().getRadians());
+    return Rotation2d.fromRadians(-(totalangleradians - pose.getRotation().getRadians()));
   }
 
   public Pose2d getTurretPose() {
@@ -180,10 +185,10 @@ public class TurretIOKraken implements TurretIO {
 
     if (positionMotor
             .getPosition()
-            .isNear(ShooterConstants.maxRotation / 2, ShooterConstants.turretTolerance)
+            .isNear(ShooterConstants.maxRotationPositive, ShooterConstants.turretTolerance)
         || positionMotor
             .getPosition()
-            .isNear(-ShooterConstants.maxRotation / 2, ShooterConstants.turretTolerance)
+            .isNear(-ShooterConstants.maxRotationNegative, ShooterConstants.turretTolerance)
         || unwinding == true) {
       positionMotor.setControl(control.withPosition(0));
       unwinding = true;

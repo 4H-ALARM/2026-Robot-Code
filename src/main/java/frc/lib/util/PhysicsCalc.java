@@ -34,8 +34,7 @@ public final class PhysicsCalc {
   private static final double TIME_STEP_S = 0.005;
 
   public static double calculateLaunchAngleDeg(double initialSpeedMps, double distanceMeters) {
-    return calculateLaunchAngleDeg(
-        initialSpeedMps, distanceMeters, 0.0, DEFAULT_SPIN_RPM, 75.0);
+    return calculateLaunchAngleDeg(initialSpeedMps, distanceMeters, 0.0, DEFAULT_SPIN_RPM, 75.0);
   }
 
   public static double calculateLaunchAngleDegFromWheels(
@@ -61,8 +60,7 @@ public final class PhysicsCalc {
     }
 
     TrajectorySample prevSample =
-        simulateToDistance(
-            initialSpeedMps, Math.toRadians(MIN_ANGLE_DEG), distanceMeters, spinRpm);
+        simulateToDistance(initialSpeedMps, Math.toRadians(MIN_ANGLE_DEG), distanceMeters, spinRpm);
     if (prevSample == null) {
       return Double.NaN;
     }
@@ -73,8 +71,7 @@ public final class PhysicsCalc {
         angleDeg <= MAX_ANGLE_DEG;
         angleDeg += SEARCH_STEP_DEG) {
       TrajectorySample sample =
-          simulateToDistance(
-              initialSpeedMps, Math.toRadians(angleDeg), distanceMeters, spinRpm);
+          simulateToDistance(initialSpeedMps, Math.toRadians(angleDeg), distanceMeters, spinRpm);
       if (sample == null) {
         continue;
       }
@@ -126,8 +123,7 @@ public final class PhysicsCalc {
       double highAngleDeg) {
     double low = Math.toRadians(lowAngleDeg);
     double high = Math.toRadians(highAngleDeg);
-    TrajectorySample lowSample =
-        simulateToDistance(initialSpeedMps, low, distanceMeters, spinRpm);
+    TrajectorySample lowSample = simulateToDistance(initialSpeedMps, low, distanceMeters, spinRpm);
     TrajectorySample highSample =
         simulateToDistance(initialSpeedMps, high, distanceMeters, spinRpm);
     if (lowSample == null || highSample == null) {
@@ -272,7 +268,8 @@ public final class PhysicsCalc {
     private final double vxAtDistanceMps;
     private final double vyAtDistanceMps;
 
-    private TrajectorySample(double yAtDistanceMeters, double vxAtDistanceMps, double vyAtDistanceMps) {
+    private TrajectorySample(
+        double yAtDistanceMeters, double vxAtDistanceMps, double vyAtDistanceMps) {
       this.yAtDistanceMeters = yAtDistanceMeters;
       this.vxAtDistanceMps = vxAtDistanceMps;
       this.vyAtDistanceMps = vyAtDistanceMps;
