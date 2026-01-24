@@ -11,6 +11,7 @@ public class ShooterConstants {
   public static final int turretMotorID = 1;
   public static final int shooterMotorID = 2;
   public static final int hoodMotorID = 3;
+  public static final int hoodEncoderID = 4;
   public static final int neutralToggleButtonPort = 0;
   public static final int encoderResetButtonPort = 1;
 
@@ -24,7 +25,7 @@ public class ShooterConstants {
   public static final double turretMaxAccel = 50.0;
   public static final double turretMaxSpeed = 50.0;
   public static final double turretJerk = 50.0;
-  public static final double turretRatio = 1.0;
+  public static final double turretRatio = 40 / 90;
   public static final double maxRotationPositive = 36000000.0;
   public static final double maxRotationNegative = 36000000.0;
   public static final double turretTolerance = 0;
@@ -36,9 +37,10 @@ public class ShooterConstants {
   public static final double shooterks = 0.0;
   public static final double shooterkv = 0.0;
   public static final double shooterka = 1.0;
-  public static final double shooterMaxAccel = 0.0;
-  public static final double shooterMaxSpeed = 0.0;
-  public static final double shooterJerk = 0.0;
+  public static final double shooterMaxAccel = 50.0;
+  public static final double shooterMaxSpeed = 50.0;
+  public static final double shooterJerk = 50.0;
+  public static final double hoodToMotorRatio = 1.0;
 
   public static final double hoodkp = 1.0;
   public static final double hoodki = 0.0;
@@ -47,7 +49,7 @@ public class ShooterConstants {
   public static final double hoodkv = 0.0;
   public static final double hoodka = 1.0;
   public static final double hoodkg = 1.0;
-  public static final double hoodMaxAccel = 0.0;
-  public static final double hoodMaxSpeed = 0.0;
-  public static final double hoodJerk = 0.0;
+  public static final double hoodMaxAccel = 50.0;
+  public static final double hoodMaxSpeed = 50.0;
+  public static final double hoodJerk = 50.0;
 }

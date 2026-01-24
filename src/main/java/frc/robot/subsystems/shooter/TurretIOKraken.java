@@ -23,17 +23,19 @@ import org.littletonrobotics.junction.Logger;
 /** Add your docs here. */
 public class TurretIOKraken implements TurretIO {
   private final TalonFX positionMotor;
-  private Rotation2d motorPosition;
+  private PositionTorqueCurrentFOC control;
+  private Slot0Configs turretConfig;
+  private MotionMagicConfigs turretMotionMagicConfig;
+
+  private DigitalInput neutralButton;
+  private DigitalInput resetButton;
+  private ToggleHandler neutralToggle;
+
   private TargetEnum targetEnum;
   private Pose2d robotPose;
   private Pose2d turretPose;
   private Pose2d targetPose;
-  private PositionTorqueCurrentFOC control;
-  private DigitalInput neutralButton;
-  private DigitalInput resetButton;
-  private ToggleHandler neutralToggle;
-  private Slot0Configs turretConfig;
-  private MotionMagicConfigs turretMotionMagicConfig;
+
   private boolean unwinding;
 
   private final LoggedTunableNumber turretkp =

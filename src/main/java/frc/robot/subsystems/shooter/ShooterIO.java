@@ -24,7 +24,9 @@ public interface ShooterIO {
   }
   ;
 
-  public default void changeTarget(TargetEnum target) {}
+  public void changeTarget(TargetEnum target);
+
+  public void updateTuningValues();
 
   public default void updateInputs(ShooterIOInputs inputs) {}
 }

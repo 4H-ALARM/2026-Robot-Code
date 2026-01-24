@@ -26,6 +26,7 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
+import frc.robot.subsystems.shooter.ShooterIOKraken;
 import frc.robot.subsystems.shooter.TurretIOKraken;
 import frc.robot.subsystems.shooter.TurretIOSim;
 import frc.robot.subsystems.vision.Vision;
@@ -65,7 +66,7 @@ public class RobotContainer {
                 new VisionIOPhotonVision(camera0Name, robotToCamera0),
                 new VisionIOPhotonVision(camera1Name, robotToCamera1));
 
-        shooter = new Shooter(new ShooterIO() {}, new TurretIOKraken(), drive);
+        shooter = new Shooter(new ShooterIOKraken(), new TurretIOKraken(), drive);
         break;
 
       case SIM:
@@ -84,7 +85,7 @@ public class RobotContainer {
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
-        shooter = new Shooter(new ShooterIO() {}, new TurretIOSim(), drive);
+        shooter = new Shooter(new ShooterIOKraken(), new TurretIOSim(), drive);
         break;
 
       default:
@@ -100,7 +101,7 @@ public class RobotContainer {
                 new ModuleIO() {});
 
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
-        shooter = new Shooter(new ShooterIO() {}, new TurretIOKraken(), drive);
+        shooter = new Shooter(new ShooterIOKraken(), new TurretIOKraken(), drive);
         break;
     }
 
