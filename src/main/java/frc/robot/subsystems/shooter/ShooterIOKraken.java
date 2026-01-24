@@ -11,6 +11,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import edu.wpi.first.math.geometry.Pose2d;
+import frc.lib.constants.GenericConstants;
 import frc.lib.constants.ShooterConstants;
 import frc.lib.enums.TargetEnum;
 import frc.lib.util.LoggedTunableNumber;
@@ -207,4 +208,29 @@ public class ShooterIOKraken implements ShooterIO{
         },
         hoodToMotorRatio);
   }
+
+  @Override
+  public void changeTarget(TargetEnum target) {
+    targetEnum = target;
+    switch (this.targetEnum) {
+      case HUB:
+        this.targetPose = GenericConstants.HUB_POSE2D;
+        break;
+      case ALLIANCEZONELEFT:
+        this.targetPose = GenericConstants.LEFTALLIANCE;
+        break;
+      case ALLIANCEZONECENTER:
+        this.targetPose = GenericConstants.CENTERALLIANCE;
+        break;
+      case ALLIANCEZONERIGHT:
+        this.targetPose = GenericConstants.RIGHTALLIANCE;
+        break;
+    }
+  }
+
+  
+
+
+
+
 }
