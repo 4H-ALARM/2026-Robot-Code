@@ -7,7 +7,7 @@
 
 package frc.lib.util;
 
-import frc.lib.constants.BuildConstants;
+import frc.lib.Constants.BuildConstants;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;

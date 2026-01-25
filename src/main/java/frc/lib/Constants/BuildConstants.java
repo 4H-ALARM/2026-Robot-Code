@@ -1,4 +1,4 @@
-package frc.lib.constants;
+package frc.lib.Constants;
 
 /** Automatically generated file containing build version information. */
 public final class BuildConstants {
