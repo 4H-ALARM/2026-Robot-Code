@@ -36,10 +36,10 @@ public class SimulateShotTrajectory extends Command {
     var robotPose = drive.getPose();
     var start3d = new Pose3d(robotPose.getX(), robotPose.getY(), 0.46, new Rotation3d());
 
-    double v = 100; // m/s
+    double v = 7; // m/s
     double pitch = Math.toRadians(35); // launch angle
     double yaw =
-        shooter.getTargetTurretAngle(drive.getPose()).getRadians(); // turret angle in radians
+        -shooter.getTargetTurretAngle(drive.getPose()).getRadians(); // turret angle in radians
 
     ChassisSpeeds chassisSpeeds = drive.getChassisSpeeds();
 

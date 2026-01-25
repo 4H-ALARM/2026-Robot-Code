@@ -11,14 +11,8 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import edu.wpi.first.math.geometry.Pose2d;
-<<<<<<< HEAD
 import frc.lib.Constants.GenericConstants;
 import frc.lib.Constants.ShooterConstants;
-=======
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import frc.lib.constants.GenericConstants;
-import frc.lib.constants.ShooterConstants;
->>>>>>> a36a40271be41ae537836f9dc3e5618208f57d09
 import frc.lib.enums.TargetEnum;
 import frc.lib.util.LoggedTunableNumber;
 
