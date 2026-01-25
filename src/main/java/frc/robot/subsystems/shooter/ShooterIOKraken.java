@@ -11,13 +11,14 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.lib.constants.GenericConstants;
 import frc.lib.constants.ShooterConstants;
 import frc.lib.enums.TargetEnum;
 import frc.lib.util.LoggedTunableNumber;
 
 /** Add your docs here. */
-public class ShooterIOKraken implements ShooterIO{
+public class ShooterIOKraken implements ShooterIO {
   private TalonFX shooterMotor;
   private TalonFX hoodMotor;
   private CANcoder hoodEncoder;
@@ -227,10 +228,4 @@ public class ShooterIOKraken implements ShooterIO{
         break;
     }
   }
-
-  
-
-
-
-
 }
