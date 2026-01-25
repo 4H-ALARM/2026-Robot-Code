@@ -11,13 +11,15 @@ import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.lib.constants.SwerveConstants;
+import frc.lib.Constants.SwerveConstants;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.SimulateShotTrajectory;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -25,7 +27,6 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.shooter.Shooter;
-import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOKraken;
 import frc.robot.subsystems.shooter.TurretIOKraken;
 import frc.robot.subsystems.shooter.TurretIOSim;
@@ -44,6 +45,7 @@ public class RobotContainer {
   private final Vision vision;
   private final Drive drive;
   private final Shooter shooter;
+  private SwerveDriveKinematics swerveKinematics;
 
   private final CommandXboxController controller = new CommandXboxController(0);
 
@@ -86,6 +88,7 @@ public class RobotContainer {
                 new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
         shooter = new Shooter(new ShooterIOKraken(), new TurretIOSim(), drive);
+
         break;
 
       default:
@@ -136,6 +139,7 @@ public class RobotContainer {
 
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    controller.y().onTrue(new SimulateShotTrajectory(drive, shooter));
 
     // Reset gyro to 0° when B button is pressed
     controller

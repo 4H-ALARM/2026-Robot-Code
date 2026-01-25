@@ -5,6 +5,7 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.enums.TargetEnum;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -37,4 +38,6 @@ public interface TurretIO {
   public void manualcontrol(double controllerInput);
 
   public default void updateInputs(TurretIOInputs inputs) {}
+
+  public Rotation2d getTargetTurretAngle(Pose2d pose);
 }

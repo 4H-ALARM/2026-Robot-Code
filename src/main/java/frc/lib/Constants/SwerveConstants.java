@@ -5,7 +5,7 @@
 // license that can be found in the LICENSE file
 // at the root directory of this project.
 
-package frc.lib.constants;
+package frc.lib.Constants;
 
 import static edu.wpi.first.units.Units.*;
 
