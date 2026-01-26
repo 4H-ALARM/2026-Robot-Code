@@ -20,6 +20,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Constants.SwerveConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.SimulateShotTrajectory;
+import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeIOReal;
+import frc.robot.subsystems.Intake.IntakeIOSim;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -45,6 +48,7 @@ public class RobotContainer {
   private final Vision vision;
   private final Drive drive;
   private final Shooter shooter;
+  private final Intake intake;
   private SwerveDriveKinematics swerveKinematics;
 
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -69,6 +73,7 @@ public class RobotContainer {
                 new VisionIOPhotonVision(camera1Name, robotToCamera1));
 
         shooter = new Shooter(new ShooterIOKraken(), new TurretIOKraken(), drive);
+        intake = new Intake(new IntakeIOReal());
         break;
 
       case SIM:
@@ -87,7 +92,9 @@ public class RobotContainer {
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
+
         shooter = new Shooter(new ShooterIOKraken(), new TurretIOSim(), drive);
+        intake = new Intake(new IntakeIOSim());
 
         break;
 
@@ -105,6 +112,7 @@ public class RobotContainer {
 
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         shooter = new Shooter(new ShooterIOKraken(), new TurretIOKraken(), drive);
+        intake = new Intake(new IntakeIOReal());
         break;
     }
 

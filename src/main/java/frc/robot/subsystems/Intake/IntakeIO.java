@@ -4,27 +4,29 @@
 
 package frc.robot.subsystems.Intake;
 
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.AutoLog;
 
 /** Add your docs here. */
+public interface IntakeIO {
 
-public interface IntakeIO{
+  @AutoLog
+  public static class IntakeIOInputs {
+    boolean pivotLeadMotorConnected;
+    boolean pivotFollowerMotorConnected;
+    boolean intakeMotorConnected;
 
-    @AutoLog
-    public static class IntakeIOInputs {
-        boolean rotationMotorConnected;
-        boolean spinMotorConnected;
+    double angleMotorCounts;
+    double speed;
+    Pose3d pivotPose3d;
+  }
 
-        double rotation;
-        double speed;
-    }
+  public void setAngle(Rotation2d targetRotation);
 
-    public void setAngle(Rotation2d targetRotation);
+  public void setSpeed(double speed);
 
-    public void setSpeed(double speed);
+  public void updateTuningValues();
 
-    public void stopMotors();
-
-    public default void updateInputs(IntakeIOInputs inputs) {}
+  public default void updateInputs(IntakeIOInputs inputs) {}
 }
