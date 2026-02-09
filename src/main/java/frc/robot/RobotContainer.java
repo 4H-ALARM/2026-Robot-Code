@@ -27,13 +27,13 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOKraken;
+import frc.robot.subsystems.shooter.TurretIO;
 import frc.robot.subsystems.shooter.TurretIOKraken;
-import frc.robot.subsystems.shooter.TurretIOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
-import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -81,13 +81,14 @@ public class RobotContainer {
                 new ModuleIOSim(SwerveConstants.FrontRight),
                 new ModuleIOSim(SwerveConstants.BackLeft),
                 new ModuleIOSim(SwerveConstants.BackRight));
-
-        vision =
+        vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+        shooter = new Shooter(new ShooterIO() {}, new TurretIO() {}, drive);
+        /*vision =
             new Vision(
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
-        shooter = new Shooter(new ShooterIOKraken(), new TurretIOSim(), drive);
+        shooter = new Shooter(new ShooterIOKraken(), new TurretIOSim(), drive);*/
 
         break;
 

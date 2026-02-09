@@ -8,23 +8,22 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.AutoLog;
 
 /** Add your docs here. */
+public interface IntakeIO {
 
-public interface IntakeIO{
+  @AutoLog
+  public static class IntakeIOInputs {
+    boolean rotationMotorConnected;
+    boolean spinMotorConnected;
 
-    @AutoLog
-    public static class IntakeIOInputs {
-        boolean rotationMotorConnected;
-        boolean spinMotorConnected;
+    double rotation;
+    double speed;
+  }
 
-        double rotation;
-        double speed;
-    }
+  public void setAngle(Rotation2d targetRotation);
 
-    public void setAngle(Rotation2d targetRotation);
+  public void setSpeed(double speed);
 
-    public void setSpeed(double speed);
+  public void stopMotors();
 
-    public void stopMotors();
-
-    public default void updateInputs(IntakeIOInputs inputs) {}
+  public default void updateInputs(IntakeIOInputs inputs) {}
 }

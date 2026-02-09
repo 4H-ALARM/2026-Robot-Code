@@ -21,23 +21,25 @@ public interface TurretIO {
     TargetEnum target;
   }
 
-  public void changeTarget(TargetEnum target);
+  public default void changeTarget(TargetEnum target) {}
 
   public default boolean isAimed() {
     return true;
   }
 
-  public void toggleNeutral();
+  public default void toggleNeutral() {}
 
-  public void resetEncoder();
+  public default void resetEncoder() {}
 
-  public void updateTuningValues();
+  public default void updateTuningValues() {}
 
-  public void turretPeriodic(Pose2d currentRobotPose);
+  public default void turretPeriodic(Pose2d currentRobotPose) {}
 
-  public void manualcontrol(double controllerInput);
+  public default void manualcontrol(double controllerInput) {}
 
   public default void updateInputs(TurretIOInputs inputs) {}
 
-  public Rotation2d getTargetTurretAngle(Pose2d pose);
+  public default Rotation2d getTargetTurretAngle(Pose2d pose) {
+    return new Rotation2d();
+  }
 }

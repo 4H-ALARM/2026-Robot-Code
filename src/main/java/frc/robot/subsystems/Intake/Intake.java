@@ -6,10 +6,10 @@ package frc.robot.subsystems.Intake;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
   private final IntakeIO Intake;
+
   public Intake(IntakeIO intake) {
     this.Intake = intake;
   }
@@ -17,6 +17,6 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
+
   }
 }
