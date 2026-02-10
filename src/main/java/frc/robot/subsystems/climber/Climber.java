@@ -5,12 +5,13 @@
 package frc.robot.subsystems.climber;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIO.ClimberIOInputs;
 
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
-  private ClimberIO m_climber;
 
+  private ClimberIO m_climber;
   private ClimberIOInputs m_climberInputs;
 
   public Climber(ClimberIO climber) {
@@ -22,12 +23,10 @@ public class Climber extends SubsystemBase {
     m_climber.updateInputs(m_climberInputs);
     // This method will be called once per scheduler run
   }
-
-  public void setArmPosition(double positionInches, ClimberIOInputs inputs) {
+  public void setArmPosition(double positionInches, ClimberIOInputs inputs){
     m_climber.setArmPosition(positionInches, inputs);
   }
-
-  public void moveArm(double speed) {
+  public void moveArm(double speed){
     m_climber.moveArm(speed);
   }
 }

@@ -7,13 +7,14 @@ package frc.robot.subsystems.climber;
 /** Add your docs here. */
 public interface ClimberIO {
 
-  public class ClimberIOInputs {
-    public double currentLengthInches = 0;
-  }
+    public class ClimberIOInputs{
+        public double currentLengthInches = 0;
+    }
 
-  public default void moveArm(double speed) {}
+    public default void moveArm(double speed) {}
 
-  public default void setArmPosition(double positionInches, ClimberIOInputs inputs) {}
+    public default void setArmPosition(double positionInches, ClimberIOInputs inputs) {}
 
-  public default void updateInputs(ClimberIOInputs inputs) {}
+    public default void updateInputs(ClimberIOInputs inputs) {}
+
 }
