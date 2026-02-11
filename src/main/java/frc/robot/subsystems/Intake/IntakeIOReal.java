@@ -245,6 +245,7 @@ public class IntakeIOReal implements IntakeIO {
     inputs.speed = intakeMotor.getVelocity().getValueAsDouble();
     pivotLigament.setAngle(inputs.angleMotorCounts);
     Logger.recordOutput("Intake/mechanism2d", intakeMechanism);
-    inputs.pivotPose3d = intakeMechanism.generate3dMechanism().get(1);
+    inputs.pivotPose3d = intakeMechanism.generate3dMechanism().get(0);
+    Logger.recordOutput("Intake/realpose3d", intakeMechanism.generate3dMechanism().get(0));
   }
 }

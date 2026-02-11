@@ -16,6 +16,7 @@ public class Intake extends SubsystemBase {
   public Intake(IntakeIO Intake) {
     this.intake = Intake;
     inputs = new IntakeIOInputsAutoLogged();
+    this.intake.setAngle(IntakeConstants.startingRotation);
   }
 
   public void setToIntake() {

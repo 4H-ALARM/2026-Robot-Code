@@ -43,8 +43,8 @@ public class IntakeIOSim implements IntakeIO {
     LoggedMechanismRoot2d root = intakeMechanism.getRoot("IntakeRoot", 0.5, 0.5);
     pivotLigament = root.append(new LoggedMechanismLigament2d("IntakePivot", 0.3, 0.0));
 
-    targetAngleDeg = 0.0;
-    pivotPositionDeg = 0.0;
+    targetAngleDeg = IntakeConstants.startingRotation.getDegrees();
+    pivotPositionDeg = IntakeConstants.startingRotation.getDegrees();
     pivotVelocityDegPerSec = 0.0;
     intakeSpeed = 0.0;
   }
@@ -79,6 +79,7 @@ public class IntakeIOSim implements IntakeIO {
     pivotLigament.setAngle(pivotPositionDeg);
     Logger.recordOutput("Intake/mechanism2d", intakeMechanism);
     Pose3d pivotPose3d = intakeMechanism.generate3dMechanism().get(0);
+    Logger.recordOutput("Intake/realpose3d", pivotPose3d);
     inputs.pivotPose3d = pivotPose3d;
 
     inputs.intakeMotorConnected = true;

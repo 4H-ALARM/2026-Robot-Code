@@ -8,6 +8,7 @@ public class IntakeConstants {
   public static final int pivotFollowerID = 1;
   public static final int intakeMotorId = 2;
 
+  public static final Rotation2d startingRotation = Rotation2d.fromDegrees(105.0);
   public static final Rotation2d downRotation = new Rotation2d();
   public static final Rotation2d upRotation = new Rotation2d();
   public static final double intakeVelocity = 0;
