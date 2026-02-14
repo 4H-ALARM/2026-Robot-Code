@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Constants.SwerveConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.SimulateShotTrajectory;
+import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeIOKraken;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -34,6 +36,11 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import frc.robot.commands.MoveIntake;
+import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeIO;
+import frc.robot.subsystems.Intake.IntakeIOKraken;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -45,6 +52,7 @@ public class RobotContainer {
   private final Vision vision;
   private final Drive drive;
   private final Shooter shooter;
+  private final Intake intake;
   private SwerveDriveKinematics swerveKinematics;
 
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -61,7 +69,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(SwerveConstants.FrontRight),
                 new ModuleIOTalonFX(SwerveConstants.BackLeft),
                 new ModuleIOTalonFX(SwerveConstants.BackRight));
-
+                
         vision =
             new Vision(
                 drive::addVisionMeasurement,
@@ -69,6 +77,7 @@ public class RobotContainer {
                 new VisionIOPhotonVision(camera1Name, robotToCamera1));
 
         shooter = new Shooter(new ShooterIOKraken(), new TurretIOKraken(), drive);
+        intake = new Intake(new IntakeIOKraken());
         break;
 
       case SIM:
@@ -88,6 +97,7 @@ public class RobotContainer {
                 new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
         shooter = new Shooter(new ShooterIOKraken(), new TurretIOSim(), drive);
+        intake = new Intake(new IntakeIO() {});
 
         break;
 
@@ -105,6 +115,8 @@ public class RobotContainer {
 
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         shooter = new Shooter(new ShooterIOKraken(), new TurretIOKraken(), drive);
+        intake = new Intake(new IntakeIO() {});
+
         break;
     }
 
@@ -120,12 +132,12 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Default command, normal field-relative drive
-    drive.setDefaultCommand(
-        DriveCommands.joystickDrive(
-            drive,
-            () -> -controller.getLeftY(),
-            () -> -controller.getLeftX(),
-            () -> -controller.getRightX()));
+    // drive.setDefaultCommand(
+    //     DriveCommands.joystickDrive(
+    //         drive,
+    //         () -> -controller.getLeftY(),
+    //         () -> -controller.getLeftX(),
+    //         () -> -controller.getRightX()));
 
     // Lock to 0° when A button is held
     controller
@@ -140,7 +152,7 @@ public class RobotContainer {
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     controller.y().onTrue(new SimulateShotTrajectory(drive, shooter));
-
+    controller.rightTrigger().whileTrue(new MoveIntake(intake, () -> controller.getRawAxis(0)*0.25));
     // Reset gyro to 0° when B button is pressed
     controller
         .b()
