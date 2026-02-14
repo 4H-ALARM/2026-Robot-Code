@@ -14,17 +14,20 @@ public interface IntakeIO{
     @AutoLog
     public static class IntakeIOInputs {
         boolean rotationMotorConnected;
-        boolean spinMotorConnected;
+        boolean rotationMotorFollowerConnected;
+        boolean intakingMotorConnected;
 
-        double rotation;
-        double speed;
+        double rotationDegrees;
     }
+    public void resetEncoder();
 
-    public void setAngle(Rotation2d targetRotation);
+    public void changeAngleTest(double speed);
 
-    public void setSpeed(double speed);
+    public void setAngle(double angleDegrees, IntakeIOInputs inputs);
 
-    public void stopMotors();
+    public void setIntakeSpeed(double speed);
+
+    public void stopIntake();
 
     public default void updateInputs(IntakeIOInputs inputs) {}
 }
