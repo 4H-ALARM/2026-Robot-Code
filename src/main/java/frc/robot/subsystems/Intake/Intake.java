@@ -28,6 +28,7 @@ public class Intake extends SubsystemBase {
     m_intakeIO.resetEncoder();
   }
 
+/// don't use for regular code, no automatic stop.
   public void changeAngleTest(double speed){
     m_intakeIO.changeAngleTest(speed);
     // dont use for regular code, no automatic stop
