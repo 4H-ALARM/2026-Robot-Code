@@ -30,6 +30,7 @@ public class Intake extends SubsystemBase {
 
   public void changeAngleTest(double speed){
     m_intakeIO.changeAngleTest(speed);
+    // dont use for regular code, no automatic stop
   }
 
   public void setAngle(double angleDegrees) {

@@ -18,6 +18,7 @@ public interface IntakeIO{
         boolean intakingMotorConnected;
 
         double rotationDegrees;
+        double rotationSpeed;
     }
     public void resetEncoder();
 
