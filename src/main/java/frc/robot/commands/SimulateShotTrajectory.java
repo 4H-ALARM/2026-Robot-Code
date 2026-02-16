@@ -57,7 +57,8 @@ public class SimulateShotTrajectory extends Command {
     // Shooter velocity = needed velocity - chassis velocity
     double shooterVx = neededVx - chassisSpeeds.vxMetersPerSecond;
     double shooterVy = neededVy - chassisSpeeds.vyMetersPerSecond;
-    Logger.recordOutput("shooterSpeed", Math.sqrt(shooterVx * shooterVx + shooterVy * shooterVy));
+    Logger.recordOutput(
+        "shooterSpeed (x & y, not z)", Math.sqrt(shooterVx * shooterVx + shooterVy * shooterVy));
 
     // Total ball velocity (this adds back to get needed direction)
     double vx = shooterVx + chassisSpeeds.vxMetersPerSecond;
