@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.shooter;
+package frc.robot.subsystems.endeffector;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,13 +15,15 @@ public class Shooter extends SubsystemBase {
   private TurretIO turret;
   private ShooterIO shooter;
   private Drive drive;
+  private IndexerIO indexer;
 
   /** FIX DO NOT WANT TO IMPORT A WHOLE DRIVE */
-  public Shooter(ShooterIO shooter, TurretIO turret, Drive drive) {
+  public Shooter(ShooterIO shooter, TurretIO turret, Drive drive, IndexerIO indexer) {
     this.turretInputs = new TurretIOInputsAutoLogged();
     this.turret = turret;
     this.shooter = shooter;
     this.drive = drive;
+    this.indexer = indexer;
   }
 
   @Override
@@ -32,5 +34,13 @@ public class Shooter extends SubsystemBase {
 
   public Rotation2d getTargetTurretAngle(Pose2d pose) {
     return turret.getTargetTurretAngle(pose);
+  }
+
+  public void spinShooter(double speed) {
+    shooter.setShooterSpeed(speed);
+  }
+
+  public void setIndexerSpeed(double indexerSpeed) {
+    indexer.setIndexerSpeed(indexerSpeed);
   }
 }

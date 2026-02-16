@@ -70,7 +70,8 @@ public class RobotContainer {
                 new VisionIOPhotonVision(camera0Name, robotToCamera0),
                 new VisionIOPhotonVision(camera1Name, robotToCamera1));
 
-        shooter = new Shooter(new ShooterIOKraken(), new TurretIOKraken(), drive, new IndexerIOKraken());
+        shooter =
+            new Shooter(new ShooterIOKraken(), new TurretIOKraken(), drive, new IndexerIOKraken());
         break;
 
       case SIM:
@@ -89,7 +90,8 @@ public class RobotContainer {
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
-        shooter = new Shooter(new ShooterIOKraken(), new TurretIOSim(), drive, new IndexerIOKraken());
+        shooter =
+            new Shooter(new ShooterIOKraken(), new TurretIOSim(), drive, new IndexerIOKraken());
 
         break;
 
@@ -106,7 +108,8 @@ public class RobotContainer {
                 new ModuleIO() {});
 
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
-        shooter = new Shooter(new ShooterIOKraken(), new TurretIOKraken(), drive, new IndexerIOKraken());
+        shooter =
+            new Shooter(new ShooterIOKraken(), new TurretIOKraken(), drive, new IndexerIOKraken());
         break;
     }
 
@@ -143,8 +146,10 @@ public class RobotContainer {
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     controller.y().onTrue(new SimulateShotTrajectory(drive, shooter));
     controller.leftBumper().onTrue(new InstantCommand(() -> shooter.spinShooter(1)));
-    controller.a().whileTrue(new InstantCommand(() -> shooter.spinShooter(1))).whileTrue(new InstantCommand(() -> shooter.setIndexerSpeed(1)));
-
+    controller
+        .a()
+        .whileTrue(new InstantCommand(() -> shooter.spinShooter(1)))
+        .whileTrue(new InstantCommand(() -> shooter.setIndexerSpeed(1)));
 
     // Reset gyro to 0° when B button is pressed
     controller

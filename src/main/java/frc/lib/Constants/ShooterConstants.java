@@ -11,6 +11,7 @@ public class ShooterConstants {
   public static final int turretMotorID = 1;
   public static final int shooterMotorID = 2;
   public static final int hoodMotorID = 3;
+  public static final int indexerMotorID = 7;
   public static final int hoodEncoderID = 4;
   public static final int neutralToggleButtonPort = 0;
   public static final int encoderResetButtonPort = 1;

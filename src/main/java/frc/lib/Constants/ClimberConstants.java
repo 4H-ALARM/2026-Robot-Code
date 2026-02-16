@@ -6,10 +6,10 @@ package frc.lib.Constants;
 
 /** Add your docs here. */
 public class ClimberConstants {
-    
-    public static final int climberMotorID = 2;
-    public static final int climberRotationToInches = 0;
-    public static final int climberkp = 1;
-    public static final int climberki = 0;
-    public static final int climberkd = 0;
+
+  public static final int climberMotorID = 2;
+  public static final int climberRotationToInches = 0;
+  public static final int climberkp = 1;
+  public static final int climberki = 0;
+  public static final int climberkd = 0;
 }
