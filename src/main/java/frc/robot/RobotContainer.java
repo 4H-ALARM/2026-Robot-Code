@@ -19,8 +19,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Constants.SwerveConstants;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.MoveIntake;
 import frc.robot.commands.SimulateShotTrajectory;
 import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeIO;
 import frc.robot.subsystems.Intake.IntakeIOKraken;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -36,11 +38,6 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
-import frc.robot.commands.MoveIntake;
-import frc.robot.subsystems.Intake.Intake;
-import frc.robot.subsystems.Intake.IntakeIO;
-import frc.robot.subsystems.Intake.IntakeIOKraken;
-
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -69,7 +66,7 @@ public class RobotContainer {
                 new ModuleIOTalonFX(SwerveConstants.FrontRight),
                 new ModuleIOTalonFX(SwerveConstants.BackLeft),
                 new ModuleIOTalonFX(SwerveConstants.BackRight));
-                
+
         vision =
             new Vision(
                 drive::addVisionMeasurement,
@@ -152,7 +149,7 @@ public class RobotContainer {
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     controller.y().onTrue(new SimulateShotTrajectory(drive, shooter));
-    controller.rightTrigger().whileTrue(new MoveIntake(intake, () -> controller.getRawAxis(0)*0.25));
+    controller.rightTrigger().whileTrue(new MoveIntake(intake, () -> controller.getRawAxis(0)));
     // Reset gyro to 0° when B button is pressed
     controller
         .b()

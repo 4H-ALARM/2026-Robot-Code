@@ -4,31 +4,33 @@
 
 package frc.robot.commands;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake.Intake;
+import java.util.function.Supplier;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MoveIntake extends Command {
   /** Creates a new MoveIntake. */
   Intake m_intake;
+
   Supplier<Double> m_speed;
+
   public MoveIntake(Intake intake, Supplier<Double> speed) {
     m_intake = intake;
     m_speed = speed;
+    addRequirements(intake);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_intake.changeAngleTest(m_speed.get());
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_intake.changeAngleTest(m_speed.get());
+  }
 
   // Called once the command ends or is interrupted.
   @Override
