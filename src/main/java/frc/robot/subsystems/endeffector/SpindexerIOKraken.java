@@ -3,7 +3,6 @@ package frc.robot.subsystems.endeffector;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.PIDController;
 import frc.lib.Constants.IndexerConstants;
-import frc.robot.subsystems.endeffector.SpindexerIO;
 
 public class SpindexerIOKraken implements SpindexerIO {
 

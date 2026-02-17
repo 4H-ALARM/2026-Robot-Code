@@ -16,14 +16,17 @@ public class Shooter extends SubsystemBase {
   private ShooterIO shooter;
   private Drive drive;
   private IndexerIO indexer;
+  private SpindexerIO m_spindexer;
 
   /** FIX DO NOT WANT TO IMPORT A WHOLE DRIVE */
-  public Shooter(ShooterIO shooter, TurretIO turret, Drive drive, IndexerIO indexer) {
+  public Shooter(
+      ShooterIO shooter, TurretIO turret, Drive drive, IndexerIO indexer, SpindexerIO spindexer) {
     this.turretInputs = new TurretIOInputsAutoLogged();
     this.turret = turret;
     this.shooter = shooter;
     this.drive = drive;
     this.indexer = indexer;
+    this.m_spindexer = spindexer;
   }
 
   @Override
@@ -42,5 +45,9 @@ public class Shooter extends SubsystemBase {
 
   public void setIndexerSpeed(double indexerSpeed) {
     indexer.setIndexerSpeed(indexerSpeed);
+  }
+
+  public void setSpindexerSpeed(double speed) {
+    m_spindexer.setSpindexerSpeed(speed);
   }
 }

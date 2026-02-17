@@ -30,6 +30,8 @@ import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.endeffector.IndexerIOKraken;
 import frc.robot.subsystems.endeffector.Shooter;
 import frc.robot.subsystems.endeffector.ShooterIOKraken;
+import frc.robot.subsystems.endeffector.SpindexerIO;
+import frc.robot.subsystems.endeffector.SpindexerIOKraken;
 import frc.robot.subsystems.endeffector.TurretIOKraken;
 import frc.robot.subsystems.endeffector.TurretIOSim;
 import frc.robot.subsystems.vision.Vision;
@@ -71,7 +73,7 @@ public class RobotContainer {
                 new VisionIOPhotonVision(camera1Name, robotToCamera1));
 
         shooter =
-            new Shooter(new ShooterIOKraken(), new TurretIOKraken(), drive, new IndexerIOKraken());
+            new Shooter(new ShooterIOKraken(), new TurretIOKraken(), drive, new IndexerIOKraken(), new SpindexerIOKraken());
         break;
 
       case SIM:
@@ -91,7 +93,7 @@ public class RobotContainer {
                 new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
         shooter =
-            new Shooter(new ShooterIOKraken(), new TurretIOSim(), drive, new IndexerIOKraken());
+            new Shooter(new ShooterIOKraken(), new TurretIOSim(), drive, new IndexerIOKraken(), new SpindexerIO() {});
 
         break;
 
@@ -109,7 +111,7 @@ public class RobotContainer {
 
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         shooter =
-            new Shooter(new ShooterIOKraken(), new TurretIOKraken(), drive, new IndexerIOKraken());
+            new Shooter(new ShooterIOKraken(), new TurretIOKraken(), drive, new IndexerIOKraken(), new SpindexerIO(){});
         break;
     }
 
@@ -149,7 +151,11 @@ public class RobotContainer {
     controller
         .a()
         .whileTrue(new InstantCommand(() -> shooter.spinShooter(1)))
-        .whileTrue(new InstantCommand(() -> shooter.setIndexerSpeed(1)));
+        .whileTrue(new InstantCommand(() -> shooter.setIndexerSpeed(1)))
+        .whileTrue(new InstantCommand(() -> shooter.setSpindexerSpeed(1)))
+        .whileFalse(new InstantCommand(() -> shooter.setIndexerSpeed(0)))
+        .whileFalse(new InstantCommand(() -> shooter.spinShooter(0)))
+        .whileFalse(new InstantCommand(() -> shooter.setSpindexerSpeed(0)));
 
     // Reset gyro to 0° when B button is pressed
     controller
