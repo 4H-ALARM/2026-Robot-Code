@@ -12,17 +12,8 @@ public interface IndexerIO {
   public class IndexerIOInputs {
     double indexerSpeed;
   }
-  ;
 
-<<<<<<< HEAD
-  public default void changeTarget(TargetEnum target) {}
+  public default void setIndexerSpeed(double indexerSpeed) {}
 
-  public default void updateTuningValues() {}
-
-  public default void updateInputs(ShooterIOInputs inputs) {}
-=======
-  public void setIndexerSpeed(double indexerSpeed);
-
-  public void stopIndexer();
->>>>>>> 37ba14d (fixed build time error)
+  public default void stopIndexer() {}
 }

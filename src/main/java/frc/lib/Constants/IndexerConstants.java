@@ -7,11 +7,11 @@ package frc.lib.Constants;
 /** Add your docs here. */
 public class IndexerConstants {
 
-    // Device IDs
-    public static final int spindexerMotorID = -1;
+  // Device IDs
+  public static final int spindexerMotorID = -1;
 
-    // Spindexer PID loop tuning
-    public static final int spindexerkp = 1;
-    public static final int spindexerki = 0;
-    public static final int spindexerkd = 0;
+  // Spindexer PID loop tuning
+  public static final int spindexerkp = 1;
+  public static final int spindexerki = 0;
+  public static final int spindexerkd = 0;
 }
