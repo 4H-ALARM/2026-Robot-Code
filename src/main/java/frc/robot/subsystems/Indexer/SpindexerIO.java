@@ -9,6 +9,7 @@ public interface SpindexerIO {
 
     public class SpindexerIOInputs {
         public boolean isSpindexerMotorConnected = false;
+        public double speed;
         
     }
 

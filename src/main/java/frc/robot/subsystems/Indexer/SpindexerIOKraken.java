@@ -36,6 +36,7 @@ public class SpindexerIOKraken implements SpindexerIO{
 
     public void updateInputs(SpindexerIOInputs inputs) {
         inputs.isSpindexerMotorConnected = m_motor.isConnected();
+        inputs.speed = m_motor.getVelocity().getValueAsDouble();
     }
 
 }
