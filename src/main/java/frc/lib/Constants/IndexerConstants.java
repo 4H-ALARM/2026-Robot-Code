@@ -14,7 +14,4 @@ public class IndexerConstants {
     public static final int spindexerkp = 1;
     public static final int spindexerki = 0;
     public static final int spindexerkd = 0;
-
-    // Motor speeds
-    public static final int spindexerSpeed = 8;
 }

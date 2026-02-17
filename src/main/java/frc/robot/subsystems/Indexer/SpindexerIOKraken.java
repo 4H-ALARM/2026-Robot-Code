@@ -15,7 +15,7 @@ public class SpindexerIOKraken implements SpindexerIO{
     private PIDController m_pid;
 
     public SpindexerIOKraken() {
-        m_motor = new TalonFX(m_constants.spindexerMotorID);
+        m_motor = new TalonFX(m_constants.spindexerMotorID, "Turret");
         m_pid = new PIDController(
          m_constants.spindexerkp,
          m_constants.spindexerki,
