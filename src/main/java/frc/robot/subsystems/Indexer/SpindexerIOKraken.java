@@ -1,46 +1,39 @@
 package frc.robot.subsystems.Indexer;
 
-import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.configs.VoltageConfigs;
-import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-
 import edu.wpi.first.math.controller.PIDController;
 import frc.lib.Constants.IndexerConstants;
 
-public class SpindexerIOKraken implements SpindexerIO{
+public class SpindexerIOKraken implements SpindexerIO {
 
-    private TalonFX m_motor;
-    private IndexerConstants m_constants;
-    private PIDController m_pid;
+  private TalonFX m_motor;
+  private IndexerConstants m_constants;
+  private PIDController m_pid;
 
-    public SpindexerIOKraken() {
-        m_motor = new TalonFX(m_constants.spindexerMotorID, "Turret");
-        m_pid = new PIDController(
-         m_constants.spindexerkp,
-         m_constants.spindexerki,
-         m_constants.spindexerkd);
-         m_pid.setTolerance(5);
+  public SpindexerIOKraken() {
+    m_motor = new TalonFX(m_constants.spindexerMotorID, "Turret");
+    m_pid =
+        new PIDController(
+            m_constants.spindexerkp, m_constants.spindexerki, m_constants.spindexerkd);
+    m_pid.setTolerance(5);
+  }
 
-    }
+  public void setSpindexerSpeed(double speed) {
+    m_motor.set(speed);
+  }
 
-    public void setSpindexerSpeed(double speed) {
-        m_motor.set(speed);
-    }
+  public void activateMotor() {
+    m_pid.reset();
+    // m_motor.set(m_pid);
 
-    public void activateMotor() {
-        m_pid.reset();
-        // m_motor.set(m_pid);
+  }
 
-    }
+  public void stopMotor() {
+    m_motor.stopMotor();
+  }
 
-    public void stopMotor() {
-        m_motor.stopMotor();
-    }
-
-    public void updateInputs(SpindexerIOInputs inputs) {
-        inputs.isSpindexerMotorConnected = m_motor.isConnected();
-        inputs.speed = m_motor.getVelocity().getValueAsDouble();
-    }
-
+  public void updateInputs(SpindexerIOInputs inputs) {
+    inputs.isSpindexerMotorConnected = m_motor.isConnected();
+    inputs.speed = m_motor.getVelocity().getValueAsDouble();
+  }
 }

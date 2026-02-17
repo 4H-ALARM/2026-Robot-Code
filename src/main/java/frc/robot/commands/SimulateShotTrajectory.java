@@ -10,7 +10,7 @@ import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.util.ProjectileSimulation;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.endeffector.Shooter;
 
 public class SimulateShotTrajectory extends Command {
 

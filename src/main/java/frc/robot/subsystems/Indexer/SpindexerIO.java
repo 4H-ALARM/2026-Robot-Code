@@ -7,19 +7,17 @@ package frc.robot.subsystems.Indexer;
 /** Add your docs here. */
 public interface SpindexerIO {
 
-    public class SpindexerIOInputs {
-        public boolean isSpindexerMotorConnected = false;
-        public double speed;
-        
-    }
-    
-    public default void setSpindexerSpeed(double speed) {}
+  public class SpindexerIOInputs {
+    public boolean isSpindexerMotorConnected = false;
+    public double speed;
+  }
 
-    /// Not currently working
-    public default void activateMotor() {}
+  public default void setSpindexerSpeed(double speed) {}
 
-    public default void stopMotor() {}
+  /// Not currently working
+  public default void activateMotor() {}
 
-    public default void updateInputs(SpindexerIOInputs inputs) {}
-    
+  public default void stopMotor() {}
+
+  public default void updateInputs(SpindexerIOInputs inputs) {}
 }
