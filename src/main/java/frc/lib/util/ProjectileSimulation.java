@@ -34,4 +34,34 @@ public class ProjectileSimulation {
   public Pose3d getPose() {
     return ballPose;
   }
+
+  // Add this method
+  public double getTimeOfFlight(double targetHeight) {
+    double z0 = ballPose.getZ();
+    double vz0 = velocity.getZ();
+
+    double a = 0.5 * gravity;
+    double b = -vz0;
+    double c = z0 - targetHeight;
+
+    double discriminant = b * b - 4 * a * c;
+
+    if (discriminant < 0) {
+      return -1;
+    }
+
+    double t1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+    double t2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+
+    // Return the LARGER positive time (when ball lands, not when it's rising)
+    if (t1 > 0 && t2 > 0) {
+      return Math.max(t1, t2); // Changed from Math.min to Math.max
+    } else if (t1 > 0) {
+      return t1;
+    } else if (t2 > 0) {
+      return t2;
+    }
+
+    return -1;
+  }
 }

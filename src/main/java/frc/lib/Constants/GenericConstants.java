@@ -10,7 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 
 /** Add your docs here. */
 public class GenericConstants {
-  public static final Pose2d HUB_POSE2D = new Pose2d(4.6, 3.8, new Rotation2d());
+  public static final Pose2d HUB_POSE2D = new Pose2d(4.7, 4.079, new Rotation2d());
   public static final Pose2d LEFTALLIANCE = new Pose2d();
   public static final Pose2d CENTERALLIANCE = new Pose2d();
   public static final Pose2d RIGHTALLIANCE = new Pose2d();
