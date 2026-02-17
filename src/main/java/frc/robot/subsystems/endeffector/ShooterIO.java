@@ -24,11 +24,11 @@ public interface ShooterIO {
   }
   ;
 
-  public void changeTarget(TargetEnum target);
+  public default void changeTarget(TargetEnum target) {}
 
-  public void updateTuningValues();
+  public default void updateTuningValues() {}
 
   public default void updateInputs(ShooterIOInputs inputs) {}
 
-  public void setShooterSpeed(double speed);
+  public default void setShooterSpeed(double speed) {}
 }
