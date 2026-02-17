@@ -12,7 +12,10 @@ public interface SpindexerIO {
         public double speed;
         
     }
+    
+    public default void setSpindexerSpeed(double speed) {}
 
+    /// Not currently working
     public default void activateMotor() {}
 
     public default void stopMotor() {}

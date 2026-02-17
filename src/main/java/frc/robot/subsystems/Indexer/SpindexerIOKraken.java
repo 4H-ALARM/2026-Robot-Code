@@ -24,6 +24,10 @@ public class SpindexerIOKraken implements SpindexerIO{
 
     }
 
+    public void setSpindexerSpeed(double speed) {
+        m_motor.set(speed);
+    }
+
     public void activateMotor() {
         m_pid.reset();
         // m_motor.set(m_pid);
