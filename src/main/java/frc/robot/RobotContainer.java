@@ -149,7 +149,12 @@ public class RobotContainer {
     controller
         .a()
         .whileTrue(new InstantCommand(() -> shooter.spinShooter(1)))
-        .whileTrue(new InstantCommand(() -> shooter.setIndexerSpeed(1)));
+        .whileTrue(new InstantCommand(() -> shooter.setIndexerSpeed(1)))
+        .whileTrue(new InstantCommand(()-> shooter.setSpindexerSpeed(1)))
+        .whileFalse(new InstantCommand(() -> shooter.setIndexerSpeed(0)))
+        .whileFalse(new InstantCommand(() -> shooter.spinShooter(0)))
+        .whileFalse(new InstantCommand(()-> shooter.setSpindexerSpeed(0)));
+
 
     // Reset gyro to 0° when B button is pressed
     controller
