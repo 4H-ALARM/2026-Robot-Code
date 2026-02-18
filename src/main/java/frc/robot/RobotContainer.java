@@ -19,8 +19,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Constants.SwerveConstants;
-import frc.robot.commands.DriveCommands;
-import frc.robot.commands.SimulateShotTrajectory;
+import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeIOKraken;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -49,6 +49,7 @@ public class RobotContainer {
   private final Vision vision;
   private final Drive drive;
   private final Shooter shooter;
+  private final Intake intake;
   private SwerveDriveKinematics swerveKinematics;
 
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -73,7 +74,14 @@ public class RobotContainer {
                 new VisionIOPhotonVision(camera1Name, robotToCamera1));
 
         shooter =
-            new Shooter(new ShooterIOKraken(), new TurretIOKraken(), drive, new IndexerIOKraken(), new SpindexerIOKraken());
+            new Shooter(
+                new ShooterIOKraken(),
+                new TurretIOKraken(),
+                drive,
+                new IndexerIOKraken(),
+                new SpindexerIOKraken());
+
+        intake = new Intake(new IntakeIOKraken());
         break;
 
       case SIM:
@@ -93,7 +101,14 @@ public class RobotContainer {
                 new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
         shooter =
-            new Shooter(new ShooterIOKraken(), new TurretIOSim(), drive, new IndexerIOKraken(), new SpindexerIO() {});
+            new Shooter(
+                new ShooterIOKraken(),
+                new TurretIOSim(),
+                drive,
+                new IndexerIOKraken(),
+                new SpindexerIO() {});
+
+        intake = new Intake(new IntakeIOKraken());
 
         break;
 
@@ -111,7 +126,14 @@ public class RobotContainer {
 
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         shooter =
-            new Shooter(new ShooterIOKraken(), new TurretIOKraken(), drive, new IndexerIOKraken(), new SpindexerIO(){});
+            new Shooter(
+                new ShooterIOKraken(),
+                new TurretIOKraken(),
+                drive,
+                new IndexerIOKraken(),
+                new SpindexerIO() {});
+
+        intake = new Intake(new IntakeIOKraken());
         break;
     }
 
@@ -127,35 +149,37 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Default command, normal field-relative drive
-    drive.setDefaultCommand(
-        DriveCommands.joystickDrive(
-            drive,
-            () -> -controller.getLeftY(),
-            () -> -controller.getLeftX(),
-            () -> -controller.getRightX()));
+    // drive.setDefaultCommand(
+    //     DriveCommands.joystickDrive(
+    //         drive,
+    //         () -> -controller.getLeftY(),
+    //         () -> -controller.getLeftX(),
+    //         () -> -controller.getRightX()));
 
-    // Lock to 0° when A button is held
-    controller
-        .a()
-        .whileTrue(
-            DriveCommands.joystickDriveAtAngle(
-                drive,
-                () -> -controller.getLeftY(),
-                () -> -controller.getLeftX(),
-                () -> Rotation2d.kZero));
+    // // Lock to 0° when A button is held
+    // controller
+    //     .a()
+    //     .whileTrue(
+    //         DriveCommands.joystickDriveAtAngle(
+    //             drive,
+    //             () -> -controller.getLeftY(),
+    //             () -> -controller.getLeftX(),
+    //             () -> Rotation2d.kZero));
 
     // Switch to X pattern when X button is pressed
-    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
-    controller.y().onTrue(new SimulateShotTrajectory(drive, shooter));
+    // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    // controller.y().onTrue(new SimulateShotTrajectory(drive, shooter));
     controller.leftBumper().onTrue(new InstantCommand(() -> shooter.spinShooter(1)));
     controller
         .a()
-        .whileTrue(new InstantCommand(() -> shooter.spinShooter(1)))
-        .whileTrue(new InstantCommand(() -> shooter.setIndexerSpeed(1)))
+        .whileTrue(new InstantCommand(() -> shooter.spinShooter(-0.5)))
+        .whileTrue(new InstantCommand(() -> shooter.setIndexerSpeed(-1)))
         .whileTrue(new InstantCommand(() -> shooter.setSpindexerSpeed(1)))
+        .whileTrue(new InstantCommand(() -> intake.setIntakeSpeed(.75)))
         .whileFalse(new InstantCommand(() -> shooter.setIndexerSpeed(0)))
         .whileFalse(new InstantCommand(() -> shooter.spinShooter(0)))
-        .whileFalse(new InstantCommand(() -> shooter.setSpindexerSpeed(0)));
+        .whileFalse(new InstantCommand(() -> shooter.setSpindexerSpeed(0)))
+        .whileFalse(new InstantCommand(() -> intake.setIntakeSpeed(0)));
 
     // Reset gyro to 0° when B button is pressed
     controller

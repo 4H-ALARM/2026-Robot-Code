@@ -24,7 +24,7 @@ public class IntakeIOKraken implements IntakeIO {
   IntakeConstants m_constants;
 
   public IntakeIOKraken() {
-    m_intakingMotor = new TalonFX(m_constants.intakingMotorID);
+    m_intakingMotor = new TalonFX(m_constants.intakingMotorID, "canivore");
     m_rotationMotor = new TalonFX(m_constants.rotationMotorID);
     m_rotationMotorFollow = new TalonFX(m_constants.rotationMotorFollowID);
     m_rotationMotorFollow.setControl(
