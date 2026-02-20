@@ -8,7 +8,7 @@ package frc.lib.Constants;
 public class IndexerConstants {
 
   // Device IDs
-  public static final int spindexerMotorID = -1;
+  public static final int spindexerMotorID = 17;
 
   // Spindexer PID loop tuning
   public static final int spindexerkp = 1;
