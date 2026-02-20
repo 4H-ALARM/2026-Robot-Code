@@ -161,16 +161,16 @@ public class RobotContainer {
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     // controller.y().onTrue(new SimulateShotTrajectory(drive, shooter));
     controller.leftBumper().onTrue(new InstantCommand(() -> shooter.spinShooter(1)));
-    controller
-        .a()
-        .whileTrue(new InstantCommand(() -> shooter.spinShooter(-.9)))
-        .whileTrue(new InstantCommand(() -> shooter.setIndexerSpeed(-1)))
-        .whileTrue(new InstantCommand(() -> shooter.setSpindexerSpeed(1)))
-        .whileTrue(new InstantCommand(() -> intake.setIntakeSpeed(.8)))
-        .whileFalse(new InstantCommand(() -> shooter.setIndexerSpeed(0)))
-        .whileFalse(new InstantCommand(() -> shooter.spinShooter(0)))
-        .whileFalse(new InstantCommand(() -> shooter.setSpindexerSpeed(0)))
-        .whileFalse(new InstantCommand(() -> intake.setIntakeSpeed(0)));
+    // controller
+    //     .a()
+    //     .whileTrue(new InstantCommand(() -> shooter.spinShooter(-.9)))
+    //     .whileTrue(new InstantCommand(() -> shooter.setIndexerSpeed(-1)))
+    //     .whileTrue(new InstantCommand(() -> shooter.setSpindexerSpeed(1)))
+    //     .whileTrue(new InstantCommand(() -> intake.setIntakeSpeed(.8)))
+    //     .whileFalse(new InstantCommand(() -> shooter.setIndexerSpeed(0)))
+    //     .whileFalse(new InstantCommand(() -> shooter.spinShooter(0)))
+    //     .whileFalse(new InstantCommand(() -> shooter.setSpindexerSpeed(0)))
+    //     .whileFalse(new InstantCommand(() -> intake.setIntakeSpeed(0)));
 
     // Reset gyro to 0° when B button is pressed
     controller

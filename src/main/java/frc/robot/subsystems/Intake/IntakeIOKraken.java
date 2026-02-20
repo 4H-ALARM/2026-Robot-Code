@@ -9,6 +9,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.Constants.IntakeConstants;
 
 /** Add your docs here. */
@@ -21,19 +22,17 @@ public class IntakeIOKraken implements IntakeIO {
   Slot0Configs m_pIDConfigs;
   PositionVoltage m_requestedVoltage;
 
-  IntakeConstants m_constants;
-
   public IntakeIOKraken() {
-    m_intakingMotor = new TalonFX(m_constants.intakingMotorID, "canivore");
-    m_rotationMotor = new TalonFX(m_constants.rotationMotorID, "canivore");
-    m_rotationMotorFollow = new TalonFX(m_constants.rotationMotorFollowID, "canivore");
+    m_intakingMotor = new TalonFX(IntakeConstants.intakeMotorId, "canivore");
+    m_rotationMotor = new TalonFX(IntakeConstants.pivotLeaderID, "canivore");
+    m_rotationMotorFollow = new TalonFX(IntakeConstants.pivotFollowerID, "canivore");
     m_rotationMotorFollow.setControl(
-        new Follower(m_constants.rotationMotorID, MotorAlignmentValue.Opposed));
+        new Follower(IntakeConstants.pivotLeaderID, MotorAlignmentValue.Opposed));
     m_pIDConfigs =
         new Slot0Configs()
-            .withKP(m_constants.angleMotorkp)
-            .withKI(m_constants.angleMotorki)
-            .withKD(m_constants.angleMotorkd);
+            .withKP(IntakeConstants.pivotkp)
+            .withKI(IntakeConstants.pivotki)
+            .withKD(IntakeConstants.pivotkd);
     m_rotationMotor.getConfigurator().apply(m_pIDConfigs);
     m_requestedVoltage = new PositionVoltage(0).withSlot(0);
   }
@@ -55,7 +54,7 @@ public class IntakeIOKraken implements IntakeIO {
   public void setAngle(double angleDegrees, IntakeIOInputs inputs) {
     // still need to find the angle before this will work;
     double motorRotations =
-        (angleDegrees - inputs.rotationDegrees) * m_constants.rotationGearRatio / 360;
+        (angleDegrees - inputs.angleMotorCounts) * IntakeConstants.pivotRatio / 360;
 
     m_rotationMotor.setControl(m_requestedVoltage.withPosition(motorRotations));
   }
@@ -77,10 +76,28 @@ public class IntakeIOKraken implements IntakeIO {
 
   public void updateInputs(IntakeIOInputs inputs) {
 
-    inputs.rotationMotorConnected = m_rotationMotor.isConnected();
-    inputs.intakingMotorConnected = m_intakingMotor.isConnected();
-    inputs.rotationMotorFollowerConnected = m_rotationMotorFollow.isConnected();
+    inputs.pivotLeadMotorConnected = m_rotationMotor.isConnected();
+    inputs.intakeMotorConnected = m_intakingMotor.isConnected();
+    inputs.pivotFollowerMotorConnected = m_rotationMotorFollow.isConnected();
 
     // need to figure out how many encoder units equals one full rotation
+  }
+
+  @Override
+  public void setAngle(Rotation2d targetRotation) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'setAngle'");
+  }
+
+  @Override
+  public void setSpeed(double speed) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'setSpeed'");
+  }
+
+  @Override
+  public void updateTuningValues() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'updateTuningValues'");
   }
 }

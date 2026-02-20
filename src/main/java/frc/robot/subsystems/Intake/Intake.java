@@ -23,27 +23,27 @@ public class Intake extends SubsystemBase {
 
   }
 
-  public void resetEncoder() {
-    m_intakeIO.resetEncoder();
-  }
+  // public void resetEncoder() {
+  //   m_intakeIO.resetEncoder();
+  // }
 
-  /// don't use for regular code, no automatic stop.
-  public void changeAngleTest(double speed) {
-    m_intakeIO.changeAngleTest(speed);
-    // dont use for regular code, no automatic stop
-  }
+  // /// don't use for regular code, no automatic stop.
+  // public void changeAngleTest(double speed) {
+  //   m_intakeIO.changeAngleTest(speed);
+  //   // dont use for regular code, no automatic stop
+  // }
 
-  public void setAngle(double angleDegrees) {
-    m_intakeIO.setAngle(angleDegrees, m_inputs);
-  }
+  // public void setAngle(double angleDegrees) {
+  //   m_intakeIO.setAngle(angleDegrees, m_inputs);
+  // }
 
-  public void setIntakeSpeed(double speed) {
-    m_intakeIO.setIntakeSpeed(speed);
-  }
+  // public void setIntakeSpeed(double speed) {
+  //   m_intakeIO.setIntakeSpeed(speed);
+  // }
 
-  public void stopIntake() {
-    m_intakeIO.stopIntake();
-  }
+  // public void stopIntake() {
+  //   m_intakeIO.stopIntake();
+  // }
 
   public void updateInputs() {
     m_intakeIO.updateInputs(m_inputs);
