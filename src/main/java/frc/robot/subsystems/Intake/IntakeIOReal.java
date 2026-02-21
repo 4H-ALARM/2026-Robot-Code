@@ -135,6 +135,7 @@ public class IntakeIOReal implements IntakeIO {
     tiltLeader.getConfigurator().apply(pivotMotorConfig);
     tiltLeader.setPosition(0);
     tiltFollower.getConfigurator().apply(pivotConfigFollower);
+    tiltFollower.setPosition(0);
 
     intakeMotor.getConfigurator().apply(intakeMotorConfig);
 

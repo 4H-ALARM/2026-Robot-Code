@@ -12,6 +12,7 @@ import frc.robot.subsystems.drive.Drive;
 public class Shooter extends SubsystemBase {
 
   private TurretIOInputsAutoLogged turretInputs;
+  private ShooterIOInputsAutoLogged shooterInputs;
   private TurretIO turret;
   private ShooterIO shooter;
   private Drive drive;
@@ -22,6 +23,7 @@ public class Shooter extends SubsystemBase {
   public Shooter(
       ShooterIO shooter, TurretIO turret, Drive drive, IndexerIO indexer, SpindexerIO spindexer) {
     this.turretInputs = new TurretIOInputsAutoLogged();
+    this.shooterInputs = new ShooterIOInputsAutoLogged();
     this.turret = turret;
     this.shooter = shooter;
     this.drive = drive;
@@ -33,6 +35,7 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     // this.turret.updateInputs(turretInputs);
     // this.turret.turretPeriodic(drive.getPose());
+    this.shooter.updateInputs(shooterInputs);
   }
 
   public Rotation2d getTargetTurretAngle(Pose2d pose) {
@@ -41,6 +44,10 @@ public class Shooter extends SubsystemBase {
 
   public void spinShooter(double speed) {
     shooter.setShooterSpeed(speed);
+  }
+
+  public void setHoodAngle(double angle) {
+    shooter.setHoodAngle(angle);
   }
 
   public void setIndexerSpeed(double indexerSpeed) {

@@ -16,10 +16,13 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Constants.SwerveConstants;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.SpinIndexer;
+import frc.robot.commands.SpinIntake;
+import frc.robot.commands.SpinShooter;
+import frc.robot.commands.SpinSpindexer;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeIOKraken;
 import frc.robot.subsystems.Intake.IntakeIOReal;
@@ -37,9 +40,7 @@ import frc.robot.subsystems.endeffector.SpindexerIOKraken;
 import frc.robot.subsystems.endeffector.TurretIOKraken;
 import frc.robot.subsystems.endeffector.TurretIOSim;
 import frc.robot.subsystems.vision.Vision;
-import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
-import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -57,6 +58,11 @@ public class RobotContainer {
 
   private final CommandXboxController controller = new CommandXboxController(0);
 
+  private final SpinSpindexer spinSpindexer;
+  private final SpinIndexer spinIndexer;
+  private final SpinShooter spinShooter;
+  private final SpinIntake spinIntake;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     switch (Constants.currentMode) {
@@ -73,7 +79,7 @@ public class RobotContainer {
         vision =
             new Vision(
                 drive::addVisionMeasurement,
-                new VisionIOLimelight("limelight-test", drive::getRotation));
+                new VisionIOLimelight("limelight-intake", drive::getRotation));
 
         shooter =
             new Shooter(
@@ -100,8 +106,7 @@ public class RobotContainer {
         vision =
             new Vision(
                 drive::addVisionMeasurement,
-                new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
-                new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
+                new VisionIOLimelight("limelight-intake", drive::getRotation));
         shooter =
             new Shooter(
                 new ShooterIOKraken(),
@@ -125,7 +130,10 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
 
-        vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+        vision =
+            new Vision(
+                drive::addVisionMeasurement,
+                new VisionIOLimelight("limelight-intake", drive::getRotation));
         shooter =
             new Shooter(
                 new ShooterIOKraken(),
@@ -137,6 +145,11 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOKraken());
         break;
     }
+
+    spinIndexer = new SpinIndexer(shooter);
+    spinIntake = new SpinIntake(intake);
+    spinSpindexer = new SpinSpindexer(shooter);
+    spinShooter = new SpinShooter(shooter);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -153,8 +166,8 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> -controller.getLeftY(),
-            () -> -controller.getLeftX(),
+            () -> controller.getLeftY(),
+            () -> controller.getLeftX(),
             () -> -controller.getRightX()));
 
     // intake.setDefaultCommand(
@@ -188,15 +201,14 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    // controller
-    //     .leftTrigger()
-    //     .onTrue(new InstantCommand(() -> intake.setAngleDown()))
-    //     .onTrue(new InstantCommand(() -> intake.setIntaking()))
-    //     .onFalse(new InstantCommand(() -> intake.setDefaultAngle()))
-    //     .onFalse(new InstantCommand(() -> intake.stopIntaking()));
-    controller.a().onTrue(new InstantCommand(() -> intake.resetEncoder()));
+    controller.leftTrigger().whileTrue(spinIntake);
 
-    controller.x().whileTrue(DriveCommands.joystickDrive(drive, () -> -1, () -> 0, () -> 0));
+    // controller.a().onTrue(new InstantCommand(() -> intake.resetEncoder()));
+
+    // controller.x().whileTrue(DriveCommands.joystickDrive(drive, () -> -1, () -> 0, () -> 0));
+    controller.rightTrigger().whileTrue(spinShooter);
+
+    controller.rightBumper().whileTrue(spinIndexer).whileTrue(spinSpindexer);
   }
 
   /**

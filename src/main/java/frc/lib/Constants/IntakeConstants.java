@@ -7,7 +7,7 @@ public class IntakeConstants {
   public static final int intakeMotorId = 2;
 
   public static final double startingRotation = 00;
-  public static final double downRotation = 3.05;
+  public static final double downRotation = 3.25;
   public static final double jiggleRotation = 0;
   public static final double intakeVelocity = 0;
 

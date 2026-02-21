@@ -7,6 +7,8 @@ package frc.robot.subsystems.endeffector;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -15,6 +17,7 @@ import frc.lib.Constants.GenericConstants;
 import frc.lib.Constants.ShooterConstants;
 import frc.lib.enums.TargetEnum;
 import frc.lib.util.LoggedTunableNumber;
+import org.littletonrobotics.junction.Logger;
 
 /** Add your docs here. */
 public class ShooterIOKraken implements ShooterIO {
@@ -28,6 +31,8 @@ public class ShooterIOKraken implements ShooterIO {
   private MotionMagicConfigs hoodMotionMagicConfig;
   private TalonFXConfiguration shooterMotorConfig;
   private TalonFXConfiguration hoodMotorConfig;
+  private VelocityVoltage control;
+  private PositionVoltage hoodcontrol;
 
   private TargetEnum targetEnum;
   private Pose2d robotPose;
@@ -121,11 +126,14 @@ public class ShooterIOKraken implements ShooterIO {
     hoodMotorConfig.Slot0 = hoodConfig;
     hoodMotorConfig.MotionMagic = hoodMotionMagicConfig;
     hoodMotorConfig.Feedback.FeedbackRemoteSensorID = ShooterConstants.hoodEncoderID;
-    hoodMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    hoodMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
     hoodMotorConfig.Feedback.SensorToMechanismRatio = hoodToMotorRatio.get();
 
     shooterMotor.getConfigurator().apply(shooterMotorConfig);
     hoodMotor.getConfigurator().apply(hoodMotorConfig);
+
+    control = new VelocityVoltage(0);
+    hoodcontrol = new PositionVoltage(0);
   }
 
   @Override
@@ -211,7 +219,12 @@ public class ShooterIOKraken implements ShooterIO {
 
   @Override
   public void setShooterSpeed(double speed) {
-    shooterMotor.set(speed);
+    shooterMotor.setControl(control.withVelocity(speed));
+  }
+
+  @Override
+  public void setHoodAngle(double angle) {
+    hoodMotor.setControl(hoodcontrol.withPosition(angle));
   }
 
   @Override
@@ -231,5 +244,10 @@ public class ShooterIOKraken implements ShooterIO {
         this.targetPose = GenericConstants.RIGHTALLIANCE;
         break;
     }
+  }
+
+  public void updateInputs(ShooterIOInputs inputs) {
+    Logger.recordOutput("Shooter/velocitylogged", shooterMotor.getVelocity().getValueAsDouble());
+    Logger.recordOutput("Shooter/hood", hoodMotor.getPosition().getValueAsDouble());
   }
 }
