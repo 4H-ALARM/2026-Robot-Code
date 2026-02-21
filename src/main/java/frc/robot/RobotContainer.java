@@ -24,7 +24,6 @@ import frc.robot.commands.SpinIntake;
 import frc.robot.commands.SpinShooter;
 import frc.robot.commands.SpinSpindexer;
 import frc.robot.subsystems.Intake.Intake;
-import frc.robot.subsystems.Intake.IntakeIOKraken;
 import frc.robot.subsystems.Intake.IntakeIOReal;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -142,7 +141,7 @@ public class RobotContainer {
                 new IndexerIOKraken(),
                 new SpindexerIO() {});
 
-        intake = new Intake(new IntakeIOKraken());
+        intake = new Intake(new IntakeIOReal());
         break;
     }
 

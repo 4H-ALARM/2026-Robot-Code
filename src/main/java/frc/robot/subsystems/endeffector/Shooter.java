@@ -13,8 +13,8 @@ import frc.robot.subsystems.drive.Drive;
 public class Shooter extends SubsystemBase {
   // Lookup table values must stay aligned by index.
   // Distance is meters from robot pose to hub pose.
-  private static final double[] SHOOTER_DISTANCE_LOOKUP_METERS = {1.0, 2.0, 3.0, 4.0, 5.0};
-  private static final double[] SHOOTER_SPEED_LOOKUP = {-28.0, -32.0, -36.0, -40.0, -44.0};
+  private static final double[] SHOOTER_DISTANCE_LOOKUP_METERS = {0.889, 1.0, 2.0, 4.0, 5.0};
+  private static final double[] SHOOTER_SPEED_LOOKUP = {-32.5, -35, -40.0, -42.5, -45.0};
 
   private TurretIOInputsAutoLogged turretInputs;
   private ShooterIOInputsAutoLogged shooterInputs;
@@ -65,7 +65,10 @@ public class Shooter extends SubsystemBase {
 
   /** Returns robot distance to hub in meters based on current drive pose. */
   public double getDistanceToHubMeters() {
-    return drive.getPose().getTranslation().getDistance(GenericConstants.HUB_POSE2D.getTranslation());
+    return drive
+        .getPose()
+        .getTranslation()
+        .getDistance(GenericConstants.HUB_POSE2D.getTranslation());
   }
 
   /**

@@ -8,7 +8,7 @@ package frc.lib.Constants;
 public class ShooterConstants {
 
   // Device IDs
-  public static final int turretMotorID = 1;
+  public static final int turretMotorID = 33;
   public static final int shooterMotorID = 2;
   public static final int hoodMotorID = 6;
   public static final int indexerMotorID = 7;
