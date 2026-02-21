@@ -7,12 +7,9 @@ package frc.robot.subsystems.Intake;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.MotorAlignmentValue;
-import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.Constants.IntakeConstants;
 import frc.lib.util.LoggedTunableNumber;
 import org.littletonrobotics.junction.Logger;
@@ -27,15 +24,16 @@ public class IntakeIOReal implements IntakeIO {
   public final TalonFX intakeMotor;
 
   private Slot0Configs pivotConfig;
+  private Slot0Configs pivotConfigFollower;
   private MotionMagicConfigs pivotMotionMagicConfig;
   private Slot0Configs intakeConfig;
   private MotionMagicConfigs intakeMotionMagicConfig;
   private TalonFXConfiguration pivotMotorConfig;
   private TalonFXConfiguration intakeMotorConfig;
 
-  private VelocityTorqueCurrentFOC intakeControl;
-  private PositionTorqueCurrentFOC pivotControl;
-  private Follower followerControl;
+  private VelocityVoltage intakeControl;
+  private PositionVoltage pivotControl;
+  private PositionVoltage followerControl;
 
   private final LoggedMechanism2d intakeMechanism;
   private final LoggedMechanismLigament2d pivotLigament;
@@ -81,9 +79,9 @@ public class IntakeIOReal implements IntakeIO {
       new LoggedTunableNumber("Intake/intakeJerk", IntakeConstants.intakeJerk);
 
   public IntakeIOReal() {
-    tiltLeader = new TalonFX(IntakeConstants.pivotLeaderID);
-    tiltFollower = new TalonFX(IntakeConstants.pivotFollowerID);
-    intakeMotor = new TalonFX(IntakeConstants.intakeMotorId);
+    tiltLeader = new TalonFX(IntakeConstants.pivotLeaderID, "canivore");
+    tiltFollower = new TalonFX(IntakeConstants.pivotFollowerID, "canivore");
+    intakeMotor = new TalonFX(IntakeConstants.intakeMotorId, "canivore");
 
     pivotConfig =
         new Slot0Configs()
@@ -92,6 +90,15 @@ public class IntakeIOReal implements IntakeIO {
             .withKD(pivotkd.get())
             .withKA(pivotka.get())
             .withKS(pivotks.get())
+            .withKV(pivotkv.get());
+
+    pivotConfigFollower =
+        new Slot0Configs()
+            .withKP(pivotkp.get())
+            .withKI(pivotki.get())
+            .withKD(pivotkd.get())
+            .withKA(pivotka.get())
+            .withKS(0.25)
             .withKV(pivotkv.get());
 
     pivotMotionMagicConfig =
@@ -117,8 +124,9 @@ public class IntakeIOReal implements IntakeIO {
 
     pivotMotorConfig = new TalonFXConfiguration();
     pivotMotorConfig.Slot0 = pivotConfig;
-    pivotMotorConfig.MotionMagic = pivotMotionMagicConfig;
-    pivotMotorConfig.Feedback.SensorToMechanismRatio = pivotRatio.get();
+
+    // pivotMotorConfig.MotionMagic = pivotMotionMagicConfig;
+    // pivotMotorConfig.Feedback.SensorToMechanismRatio = pivotRatio.get();
 
     intakeMotorConfig = new TalonFXConfiguration();
     intakeMotorConfig.Slot0 = intakeConfig;
@@ -126,13 +134,13 @@ public class IntakeIOReal implements IntakeIO {
 
     tiltLeader.getConfigurator().apply(pivotMotorConfig);
     tiltLeader.setPosition(0);
-    tiltFollower.getConfigurator().apply(pivotMotorConfig);
+    tiltFollower.getConfigurator().apply(pivotConfigFollower);
 
     intakeMotor.getConfigurator().apply(intakeMotorConfig);
 
-    intakeControl = new VelocityTorqueCurrentFOC(0);
-    pivotControl = new PositionTorqueCurrentFOC(0);
-    followerControl = new Follower(IntakeConstants.pivotLeaderID, MotorAlignmentValue.Opposed);
+    intakeControl = new VelocityVoltage(0);
+    pivotControl = new PositionVoltage(0);
+    followerControl = new PositionVoltage(0);
 
     intakeMechanism = new LoggedMechanism2d(1.0, 1.0);
     LoggedMechanismRoot2d root = intakeMechanism.getRoot("IntakeRoot", 0.5, 0.5);
@@ -226,13 +234,19 @@ public class IntakeIOReal implements IntakeIO {
   }
 
   @Override
-  public void setAngle(Rotation2d targetRotation) {
-    tiltLeader.setControl(pivotControl.withPosition(targetRotation.getDegrees()));
+  public void setAngle(double targetRotation) {
+    tiltLeader.setControl(pivotControl.withPosition(targetRotation));
+    tiltFollower.setControl(followerControl.withPosition(-targetRotation));
   }
 
   @Override
   public void setSpeed(double speed) {
-    intakeMotor.setControl(intakeControl.withVelocity(speed));
+    intakeMotor.set(speed);
+  }
+
+  @Override
+  public void resetEncoder() {
+    tiltLeader.setPosition(0);
   }
 
   @Override
@@ -242,6 +256,7 @@ public class IntakeIOReal implements IntakeIO {
     inputs.pivotFollowerMotorConnected = tiltFollower.isConnected();
 
     inputs.angleMotorCounts = tiltLeader.getPosition().getValueAsDouble();
+    Logger.recordOutput("Intake/encodercounts", tiltLeader.getPosition().getValueAsDouble());
     inputs.speed = intakeMotor.getVelocity().getValueAsDouble();
     pivotLigament.setAngle(inputs.angleMotorCounts);
     Logger.recordOutput("Intake/mechanism2d", intakeMechanism);

@@ -22,6 +22,7 @@ import frc.lib.Constants.SwerveConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeIOKraken;
+import frc.robot.subsystems.Intake.IntakeIOReal;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -35,6 +36,10 @@ import frc.robot.subsystems.endeffector.SpindexerIO;
 import frc.robot.subsystems.endeffector.SpindexerIOKraken;
 import frc.robot.subsystems.endeffector.TurretIOKraken;
 import frc.robot.subsystems.endeffector.TurretIOSim;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIO;
+import frc.robot.subsystems.vision.VisionIOLimelight;
+import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -47,6 +52,7 @@ public class RobotContainer {
   private final Drive drive;
   private final Shooter shooter;
   private final Intake intake;
+  private final Vision vision;
   private SwerveDriveKinematics swerveKinematics;
 
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -64,11 +70,10 @@ public class RobotContainer {
                 new ModuleIOTalonFX(SwerveConstants.BackLeft),
                 new ModuleIOTalonFX(SwerveConstants.BackRight));
 
-        // vision =
-        //     new Vision(
-        //         drive::addVisionMeasurement,
-        //         new VisionIOPhotonVision(camera0Name, robotToCamera0),
-        //         new VisionIOPhotonVision(camera1Name, robotToCamera1));
+        vision =
+            new Vision(
+                drive::addVisionMeasurement,
+                new VisionIOLimelight("limelight-test", drive::getRotation));
 
         shooter =
             new Shooter(
@@ -78,7 +83,7 @@ public class RobotContainer {
                 new IndexerIOKraken(),
                 new SpindexerIOKraken());
 
-        intake = new Intake(new IntakeIOKraken());
+        intake = new Intake(new IntakeIOReal());
         break;
 
       case SIM:
@@ -92,11 +97,11 @@ public class RobotContainer {
                 new ModuleIOSim(SwerveConstants.BackLeft),
                 new ModuleIOSim(SwerveConstants.BackRight));
 
-        // vision =
-        //     new Vision(
-        //         drive::addVisionMeasurement,
-        //         new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
-        //         new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
+        vision =
+            new Vision(
+                drive::addVisionMeasurement,
+                new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
+                new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
         shooter =
             new Shooter(
                 new ShooterIOKraken(),
@@ -105,7 +110,7 @@ public class RobotContainer {
                 new IndexerIOKraken(),
                 new SpindexerIO() {});
 
-        intake = new Intake(new IntakeIOKraken());
+        intake = new Intake(new IntakeIOReal());
         break;
 
       default:
@@ -120,7 +125,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
 
-        // vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+        vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         shooter =
             new Shooter(
                 new ShooterIOKraken(),
@@ -160,7 +165,7 @@ public class RobotContainer {
     // Switch to X pattern when X button is pressed
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     // controller.y().onTrue(new SimulateShotTrajectory(drive, shooter));
-    controller.leftBumper().onTrue(new InstantCommand(() -> shooter.spinShooter(1)));
+    // controller.leftBumper().onTrue(new InstantCommand(() -> shooter.spinShooter(1)));
     // controller
     //     .a()
     //     .whileTrue(new InstantCommand(() -> shooter.spinShooter(-.9)))
@@ -182,6 +187,16 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
                     drive)
                 .ignoringDisable(true));
+
+    // controller
+    //     .leftTrigger()
+    //     .onTrue(new InstantCommand(() -> intake.setAngleDown()))
+    //     .onTrue(new InstantCommand(() -> intake.setIntaking()))
+    //     .onFalse(new InstantCommand(() -> intake.setDefaultAngle()))
+    //     .onFalse(new InstantCommand(() -> intake.stopIntaking()));
+    controller.a().onTrue(new InstantCommand(() -> intake.resetEncoder()));
+
+    controller.x().whileTrue(DriveCommands.joystickDrive(drive, () -> -1, () -> 0, () -> 0));
   }
 
   /**

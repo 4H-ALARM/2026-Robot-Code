@@ -9,7 +9,6 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
-import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.Constants.IntakeConstants;
 
 /** Add your docs here. */
@@ -84,12 +83,6 @@ public class IntakeIOKraken implements IntakeIO {
   }
 
   @Override
-  public void setAngle(Rotation2d targetRotation) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setAngle'");
-  }
-
-  @Override
   public void setSpeed(double speed) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'setSpeed'");
@@ -99,5 +92,11 @@ public class IntakeIOKraken implements IntakeIO {
   public void updateTuningValues() {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'updateTuningValues'");
+  }
+
+  @Override
+  public void setAngle(double targetRotation) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'setAngle'");
   }
 }

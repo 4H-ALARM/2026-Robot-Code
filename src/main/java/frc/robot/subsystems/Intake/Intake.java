@@ -5,6 +5,7 @@
 package frc.robot.subsystems.Intake;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.Constants.IntakeConstants;
 import frc.robot.subsystems.Intake.IntakeIO.IntakeIOInputs;
 
 public class Intake extends SubsystemBase {
@@ -15,12 +16,13 @@ public class Intake extends SubsystemBase {
 
   public Intake(IntakeIO intake) {
     this.m_intakeIO = intake;
+    m_inputs = new IntakeIOInputs();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
+    this.m_intakeIO.updateInputs(m_inputs);
   }
 
   // public void resetEncoder() {
@@ -33,9 +35,25 @@ public class Intake extends SubsystemBase {
   //   // dont use for regular code, no automatic stop
   // }
 
-  // public void setAngle(double angleDegrees) {
-  //   m_intakeIO.setAngle(angleDegrees, m_inputs);
-  // }
+  public void setAngleDown() {
+    m_intakeIO.setAngle(IntakeConstants.downRotation);
+  }
+
+  public void setDefaultAngle() {
+    m_intakeIO.setAngle(IntakeConstants.startingRotation);
+  }
+
+  public void setIntaking() {
+    m_intakeIO.setSpeed(-0.6);
+  }
+
+  public void stopIntaking() {
+    m_intakeIO.setSpeed(0);
+  }
+
+  public void resetEncoder() {
+    m_intakeIO.resetEncoder();
+  }
 
   // public void setIntakeSpeed(double speed) {
   //   m_intakeIO.setIntakeSpeed(speed);
