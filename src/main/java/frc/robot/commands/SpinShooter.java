@@ -8,13 +8,12 @@ public class SpinShooter extends Command {
 
   /**
    * @param shooter The shooter subsystem
-   * @param speed The motor speed
    */
   public SpinShooter(Shooter shooter) {
     this.m_shooter = shooter;
 
     // Declare subsystem dependencies
-    addRequirements();
+    addRequirements(m_shooter);
   }
 
   @Override
@@ -24,8 +23,7 @@ public class SpinShooter extends Command {
 
   @Override
   public void execute() {
-    // Set shooter motor to the desired speed
-    m_shooter.spinShooter(-35);
+    m_shooter.spinShooterFromPoseDistance();
   }
 
   @Override
