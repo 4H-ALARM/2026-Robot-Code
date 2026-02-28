@@ -78,9 +78,9 @@ public class ShooterIOKraken implements ShooterIO {
 
   public ShooterIOKraken() {
 
-    shooterMotor = new TalonFX(ShooterConstants.shooterMotorID);
-    hoodMotor = new TalonFX(ShooterConstants.hoodMotorID);
-    hoodEncoder = new CANcoder(ShooterConstants.hoodEncoderID);
+    shooterMotor = new TalonFX(ShooterConstants.shooterMotorID, "Turret");
+    hoodMotor = new TalonFX(ShooterConstants.hoodMotorID, "Turret");
+    hoodEncoder = new CANcoder(ShooterConstants.hoodEncoderID, "Turret");
 
     shooterConfig =
         new Slot0Configs()

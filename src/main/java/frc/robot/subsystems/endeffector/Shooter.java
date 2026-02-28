@@ -31,8 +31,8 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    this.turret.updateInputs(turretInputs);
-    this.turret.turretPeriodic(drive.getPose());
+    // this.turret.updateInputs(turretInputs);
+    // this.turret.turretPeriodic(drive.getPose());
   }
 
   public Rotation2d getTargetTurretAngle(Pose2d pose) {

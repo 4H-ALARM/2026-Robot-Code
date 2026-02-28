@@ -182,32 +182,32 @@ public class TurretIOKraken implements TurretIO {
 
   @Override
   public void turretPeriodic(Pose2d currentRobotPose) {
-    this.robotPose = currentRobotPose;
-    updateTuningValues();
+    // this.robotPose = currentRobotPose;
+    // updateTuningValues();
 
-    if (positionMotor
-            .getPosition()
-            .isNear(ShooterConstants.maxRotationPositive, ShooterConstants.turretTolerance)
-        || positionMotor
-            .getPosition()
-            .isNear(-ShooterConstants.maxRotationNegative, ShooterConstants.turretTolerance)
-        || unwinding == true) {
-      positionMotor.setControl(control.withPosition(0));
-      unwinding = true;
-      if (positionMotor.getPosition().getValueAsDouble() == 0) {
-        unwinding = false;
-      }
-    } else {
-      positionMotor.setControl(
-          control.withPosition(getTargetTurretAngle(getTurretPose()).getDegrees()));
-    }
+    // if (positionMotor
+    //         .getPosition()
+    //         .isNear(ShooterConstants.maxRotationPositive, ShooterConstants.turretTolerance)
+    //     || positionMotor
+    //         .getPosition()
+    //         .isNear(-ShooterConstants.maxRotationNegative, ShooterConstants.turretTolerance)
+    //     || unwinding == true) {
+    //   positionMotor.setControl(control.withPosition(0));
+    //   unwinding = true;
+    //   if (positionMotor.getPosition().getValueAsDouble() == 0) {
+    //     unwinding = false;
+    //   }
+    // } else {
+    //   positionMotor.setControl(
+    //       control.withPosition(getTargetTurretAngle(getTurretPose()).getDegrees()));
+    // }
 
-    if (neutralToggle.get() == true) {
-      positionMotor.setNeutralMode(NeutralModeValue.Coast);
-    }
-    if (neutralToggle.get() == false) {
-      positionMotor.setNeutralMode(NeutralModeValue.Brake);
-    }
+    // if (neutralToggle.get() == true) {
+    //   positionMotor.setNeutralMode(NeutralModeValue.Coast);
+    // }
+    // if (neutralToggle.get() == false) {
+    //   positionMotor.setNeutralMode(NeutralModeValue.Brake);
+    // }
   }
 
   @Override

@@ -15,7 +15,7 @@ public class IndexerIOKraken implements IndexerIO {
   ShooterConstants m_constants;
 
   public IndexerIOKraken() {
-    m_rotationMotor = new TalonFX(m_constants.indexerMotorID);
+    m_rotationMotor = new TalonFX(m_constants.indexerMotorID, "Turret");
   }
 
   public void setIndexerSpeed(double speed) {
