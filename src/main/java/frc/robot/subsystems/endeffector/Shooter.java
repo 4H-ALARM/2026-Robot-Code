@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.endeffector;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.Drive;
 
@@ -13,18 +11,17 @@ public class Shooter extends SubsystemBase {
 
   private TurretIOInputsAutoLogged turretInputs;
   private ShooterIOInputsAutoLogged shooterInputs;
-  private TurretIO turret;
+  // private TurretIO turret;
   private ShooterIO shooter;
   private Drive drive;
   private IndexerIO indexer;
   private SpindexerIO m_spindexer;
 
   /** FIX DO NOT WANT TO IMPORT A WHOLE DRIVE */
-  public Shooter(
-      ShooterIO shooter, TurretIO turret, Drive drive, IndexerIO indexer, SpindexerIO spindexer) {
+  public Shooter(ShooterIO shooter, Drive drive, IndexerIO indexer, SpindexerIO spindexer) {
     this.turretInputs = new TurretIOInputsAutoLogged();
     this.shooterInputs = new ShooterIOInputsAutoLogged();
-    this.turret = turret;
+    // this.turret = turret;
     this.shooter = shooter;
     this.drive = drive;
     this.indexer = indexer;
@@ -38,9 +35,9 @@ public class Shooter extends SubsystemBase {
     this.shooter.updateInputs(shooterInputs);
   }
 
-  public Rotation2d getTargetTurretAngle(Pose2d pose) {
-    return turret.getTargetTurretAngle(pose);
-  }
+  // public Rotation2d getTargetTurretAngle(Pose2d pose) {
+  //   return turret.getTargetTurretAngle(pose);
+  // }
 
   public void spinShooter(double speed) {
     shooter.setShooterSpeed(speed);

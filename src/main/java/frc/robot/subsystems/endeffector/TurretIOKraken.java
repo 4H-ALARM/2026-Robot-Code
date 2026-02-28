@@ -233,6 +233,5 @@ public class TurretIOKraken implements TurretIO {
   @Override
   public void manualcontrol(double controllerInput) {
     // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'manualcontrol'");
   }
 }

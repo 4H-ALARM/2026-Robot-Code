@@ -22,7 +22,7 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    this.m_intakeIO.updateInputs(m_inputs);
+    // this.m_intakeIO.updateInputs(m_inputs);
   }
 
   // public void resetEncoder() {
@@ -63,7 +63,7 @@ public class Intake extends SubsystemBase {
   //   m_intakeIO.stopIntake();
   // }
 
-  public void updateInputs() {
-    m_intakeIO.updateInputs(m_inputs);
-  }
+  // public void updateInputs() {
+  //   m_intakeIO.updateInputs(m_inputs);
+  // }
 }

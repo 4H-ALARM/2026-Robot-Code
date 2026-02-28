@@ -14,7 +14,7 @@ public class SpinIndexer extends Command {
     this.m_shooter = shooter;
 
     // Declare subsystem dependencies
-    addRequirements(m_shooter);
+    addRequirements();
   }
 
   @Override

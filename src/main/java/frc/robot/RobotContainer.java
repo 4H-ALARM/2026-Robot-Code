@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.Constants.SwerveConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.SpinIndexer;
@@ -24,7 +25,6 @@ import frc.robot.commands.SpinIntake;
 import frc.robot.commands.SpinShooter;
 import frc.robot.commands.SpinSpindexer;
 import frc.robot.subsystems.Intake.Intake;
-import frc.robot.subsystems.Intake.IntakeIOKraken;
 import frc.robot.subsystems.Intake.IntakeIOReal;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -37,10 +37,6 @@ import frc.robot.subsystems.endeffector.Shooter;
 import frc.robot.subsystems.endeffector.ShooterIOKraken;
 import frc.robot.subsystems.endeffector.SpindexerIO;
 import frc.robot.subsystems.endeffector.SpindexerIOKraken;
-import frc.robot.subsystems.endeffector.TurretIOKraken;
-import frc.robot.subsystems.endeffector.TurretIOSim;
-import frc.robot.subsystems.vision.Vision;
-import frc.robot.subsystems.vision.VisionIOLimelight;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -53,15 +49,23 @@ public class RobotContainer {
   private final Drive drive;
   private final Shooter shooter;
   private final Intake intake;
-  private final Vision vision;
+  // private final Vision vision;
   private SwerveDriveKinematics swerveKinematics;
 
   private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController controller2 = new CommandXboxController(1);
+
+  private final Trigger controllerrt = controller.rightTrigger();
+  private final Trigger controllerrb = controller.rightBumper();
+  private final Trigger controllerlt = controller.leftTrigger();
+  private final Trigger controllerb = controller.b();
+  private final Trigger controller2rt = controller2.rightTrigger();
 
   private final SpinSpindexer spinSpindexer;
   private final SpinIndexer spinIndexer;
   private final SpinShooter spinShooter;
   private final SpinIntake spinIntake;
+  private final SpinShooter passShooter;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -76,15 +80,15 @@ public class RobotContainer {
                 new ModuleIOTalonFX(SwerveConstants.BackLeft),
                 new ModuleIOTalonFX(SwerveConstants.BackRight));
 
-        vision =
-            new Vision(
-                drive::addVisionMeasurement,
-                new VisionIOLimelight("limelight-intake", drive::getRotation));
+        // vision =
+        //     new Vision(
+        //         drive::addVisionMeasurement,
+        //         new VisionIOLimelight("limelight-intake", drive::getRotation));
 
         shooter =
             new Shooter(
                 new ShooterIOKraken(),
-                new TurretIOKraken(),
+                // new TurretIOKraken(),
                 drive,
                 new IndexerIOKraken(),
                 new SpindexerIOKraken());
@@ -103,14 +107,14 @@ public class RobotContainer {
                 new ModuleIOSim(SwerveConstants.BackLeft),
                 new ModuleIOSim(SwerveConstants.BackRight));
 
-        vision =
-            new Vision(
-                drive::addVisionMeasurement,
-                new VisionIOLimelight("limelight-intake", drive::getRotation));
+        // vision =
+        //     new Vision(
+        //         drive::addVisionMeasurement,
+        //         new VisionIOLimelight("limelight-intake", drive::getRotation));
         shooter =
             new Shooter(
                 new ShooterIOKraken(),
-                new TurretIOSim(),
+                // new TurretIOSim(),
                 drive,
                 new IndexerIOKraken(),
                 new SpindexerIO() {});
@@ -130,26 +134,27 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
 
-        vision =
-            new Vision(
-                drive::addVisionMeasurement,
-                new VisionIOLimelight("limelight-intake", drive::getRotation));
+        // vision =
+        //     new Vision(
+        //         drive::addVisionMeasurement,
+        //         new VisionIOLimelight("limelight-intake", drive::getRotation));
         shooter =
             new Shooter(
                 new ShooterIOKraken(),
-                new TurretIOKraken(),
+                // new TurretIOKraken(),
                 drive,
                 new IndexerIOKraken(),
                 new SpindexerIO() {});
 
-        intake = new Intake(new IntakeIOKraken());
+        intake = new Intake(new IntakeIOReal());
         break;
     }
 
     spinIndexer = new SpinIndexer(shooter);
     spinIntake = new SpinIntake(intake);
     spinSpindexer = new SpinSpindexer(shooter);
-    spinShooter = new SpinShooter(shooter);
+    spinShooter = new SpinShooter(shooter, -40);
+    passShooter = new SpinShooter(shooter, -150);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -191,24 +196,21 @@ public class RobotContainer {
     //     .whileFalse(new InstantCommand(() -> intake.setIntakeSpeed(0)));
 
     // Reset gyro to 0° when B button is pressed
-    controller
-        .b()
-        .onTrue(
-            Commands.runOnce(
-                    () ->
-                        drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
-                    drive)
-                .ignoringDisable(true));
+    controllerb.onTrue(
+        Commands.runOnce(
+                () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
+                drive)
+            .ignoringDisable(true));
 
-    controller.leftTrigger().whileTrue(spinIntake);
+    controllerlt.whileTrue(spinIntake);
 
     // controller.a().onTrue(new InstantCommand(() -> intake.resetEncoder()));
 
     // controller.x().whileTrue(DriveCommands.joystickDrive(drive, () -> -1, () -> 0, () -> 0));
-    controller.rightTrigger().whileTrue(spinShooter);
+    controllerrt.whileTrue(spinShooter);
+    controller2rt.whileTrue(passShooter);
 
-    controller.rightBumper().whileTrue(spinIndexer).whileTrue(spinSpindexer);
+    controllerrb.whileTrue(spinIndexer).whileTrue(spinSpindexer);
   }
 
   /**
