@@ -38,8 +38,8 @@ public class SimulateShotTrajectory extends Command {
 
     double v = 7; // m/s
     double pitch = Math.toRadians(35); // launch angle
-    double yaw =
-        -shooter.getTargetTurretAngle(drive.getPose()).getRadians(); // turret angle in radians
+    double yaw = 0;
+    // -shooter.getTargetTurretAngle(drive.getPose()).getRadians(); // turret angle in radians
 
     ChassisSpeeds chassisSpeeds = drive.getChassisSpeeds();
 
