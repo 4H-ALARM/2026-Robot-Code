@@ -6,24 +6,27 @@ package frc.robot.subsystems.endeffector;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.endeffector.PhaseshiftIO.PhaseshiftIOInputs;
 
 public class Shooter extends SubsystemBase {
 
   private ShooterIO shooter;
   private Drive drive;
   private IndexerIO indexer;
+  private PhaseshiftIO phaseshift;
+  private PhaseshiftIOInputs phaseshiftInputs;
 
   /** FIX DO NOT WANT TO IMPORT A WHOLE DRIVE */
-  public Shooter(ShooterIO shooter, Drive drive, IndexerIO indexer) {
+  public Shooter(ShooterIO shooter, Drive drive, IndexerIO indexer, PhaseshiftIO phaseshift) {
     this.shooter = shooter;
     this.drive = drive;
     this.indexer = indexer;
+    this.phaseshift = phaseshift;
   }
 
   @Override
   public void periodic() {
-    // this.turret.updateInputs(turretInputs);
-    // this.turret.turretPeriodic(drive.getPose());
+    phaseshift.updateInputs(phaseshiftInputs);
   }
 
   public void spinShooter(double speed) {
