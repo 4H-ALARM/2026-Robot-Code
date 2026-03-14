@@ -33,6 +33,14 @@ public class Shooter extends SubsystemBase {
     shooter.setShooterSpeed(speed);
   }
 
+  public void stopShooter() {
+    shooter.setShooterSpeed(0);
+  }
+
+  public void setHoodAngle(double hoodAngle) {
+    shooter.setHoodAngle(hoodAngle);
+  }
+
   public void setIndexerSpeed(double indexerSpeed) {
     indexer.setIndexerSpeed(indexerSpeed);
   }

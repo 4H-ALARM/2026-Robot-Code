@@ -8,6 +8,7 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -41,6 +42,8 @@ public class ShooterIOKraken implements ShooterIO {
   private Pose2d robotPose;
   private Pose2d turretPose;
   private Translation3d targetPose;
+
+  private PositionVoltage hoodPositionVoltage;
 
   private final LoggedTunableNumber shooterkp =
       new LoggedTunableNumber("Shooter/kp", ShooterConstants.shooterkp);
@@ -254,5 +257,14 @@ public class ShooterIOKraken implements ShooterIO {
         this.targetPose = GenericConstants.RIGHTALLIANCE;
         break;
     }
+  }
+
+  @Override
+  public void setHoodAngle(double angleDegrees) {
+    // still need to find the angle before this will work;
+
+    double motorRotations = (angleDegrees) * ShooterConstants.hoodGearRatio / 360;
+
+    hoodMotor.setControl(hoodPositionVoltage.withPosition(motorRotations));
   }
 }
