@@ -16,10 +16,11 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Constants.SwerveConstants;
 import frc.robot.commands.DriveCommands;
+import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeIOKraken;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -29,8 +30,6 @@ import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.endeffector.IndexerIOKraken;
 import frc.robot.subsystems.endeffector.Shooter;
 import frc.robot.subsystems.endeffector.ShooterIOKraken;
-import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeIOKraken;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -138,15 +137,41 @@ public class RobotContainer {
     // Switch to X pattern when X button is pressed
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     // controller.y().onTrue(new SimulateShotTrajectory(drive, shooter));
-    controller.leftBumper().onTrue(new InstantCommand(() -> shooter.spinShooter(1)));
+    controller
+        .leftBumper()
+        .whileTrue(
+            Commands.runEnd(
+                () -> shooter.spinShooter(controller.getLeftY()),
+                () -> shooter.spinShooter(0),
+                shooter,
+                drive));
+
+    controller
+        .rightBumper()
+        .whileTrue(
+            Commands.runEnd(
+                () -> intake.setIntakeSpeed(controller.getLeftY()),
+                () -> intake.setIntakeSpeed(0),
+                intake,
+                drive));
+
+    controller
+        .x()
+        .whileTrue(
+            Commands.runEnd(
+                () -> shooter.setIndexerSpeed(controller.getLeftY()),
+                () -> shooter.setIndexerSpeed(0),
+                shooter,
+                drive));
+
     controller
         .a()
-        .whileTrue(new InstantCommand(() -> shooter.spinShooter(-.9)))
-        .whileTrue(new InstantCommand(() -> shooter.setIndexerSpeed(-1)))
-        .whileTrue(new InstantCommand(() -> intake.setIntakeSpeed(.8)))
-        .whileFalse(new InstantCommand(() -> shooter.setIndexerSpeed(0)))
-        .whileFalse(new InstantCommand(() -> shooter.spinShooter(0)))
-        .whileFalse(new InstantCommand(() -> intake.setIntakeSpeed(0)));
+        .whileTrue(
+            Commands.runEnd(
+                () -> intake.changeAngleTest(controller.getLeftY() * 0.5),
+                () -> intake.changeAngleTest(0),
+                intake,
+                drive));
 
     // Reset gyro to 0° when B button is pressed
     controller
