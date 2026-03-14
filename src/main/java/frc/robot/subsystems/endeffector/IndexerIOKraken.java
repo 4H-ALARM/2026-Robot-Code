@@ -4,27 +4,32 @@
 
 package frc.robot.subsystems.endeffector;
 
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import frc.lib.Constants.ShooterConstants;
 
 /** Add your docs here. */
 public class IndexerIOKraken implements IndexerIO {
 
-  TalonFX m_rotationMotor;
-
-  ShooterConstants m_constants;
+  TalonFX m_indexerMotor;
+  TalonFX m_indexerMotorFollower;
 
   public IndexerIOKraken() {
-    m_rotationMotor = new TalonFX(m_constants.indexerMotorID, "Turret");
+    m_indexerMotor = new TalonFX(ShooterConstants.indexerMotorID, ShooterConstants.shooterCanbus);
+    m_indexerMotorFollower =
+        new TalonFX(ShooterConstants.indexerMotorFollowerID, ShooterConstants.shooterCanbus);
+    m_indexerMotorFollower.setControl(
+        new Follower(ShooterConstants.indexerMotorID, MotorAlignmentValue.Opposed));
   }
 
   public void setIndexerSpeed(double speed) {
-    m_rotationMotor.set(speed);
+    m_indexerMotor.set(speed);
   }
 
   public void stopIndexer() {
 
-    m_rotationMotor.set(0);
+    m_indexerMotor.set(0);
   }
 
   public void updateInputs(IndexerIOInputs inputs) {

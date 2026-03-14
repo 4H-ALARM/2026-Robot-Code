@@ -8,13 +8,18 @@ package frc.lib.Constants;
 public class ShooterConstants {
 
   // Device IDs
-  public static final int turretMotorID = 1;
-  public static final int shooterMotorID = 2;
-  public static final int hoodMotorID = 3;
-  public static final int indexerMotorID = 7;
+  public static final int topShooterMotorRightID = 24;
+  public static final int topShooterMotorLeftID = 34;
+  public static final int bottomShooterMotorRightID = 25;
+  public static final int bottomShooterMotorLeftID = 35;
+  public static final int hoodMotorID = 26;
+  public static final int hoodMotorFollowerID = 36;
+  public static final int indexerMotorID = 27;
+  public static final int indexerMotorFollowerID = 37;
   public static final int hoodEncoderID = 4;
   public static final int neutralToggleButtonPort = 0;
   public static final int encoderResetButtonPort = 1;
+  public static final String shooterCanbus = "canivore";
 
   // Turret Tuning Constants
   public static final double turretkp = 1.0;

@@ -7,9 +7,11 @@ package frc.robot.subsystems.endeffector;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import edu.wpi.first.math.geometry.Pose2d;
 import frc.lib.Constants.GenericConstants;
 import frc.lib.Constants.ShooterConstants;
@@ -18,8 +20,13 @@ import frc.lib.util.LoggedTunableNumber;
 
 /** Add your docs here. */
 public class ShooterIOKraken implements ShooterIO {
-  private TalonFX shooterMotor;
+  private TalonFX topShooterMotorRight;
+  private TalonFX topShooterMotorLeft;
+  private TalonFX bottomShooterMotorRight;
+  private TalonFX bottomShooterMotorLeft;
   private TalonFX hoodMotor;
+  private TalonFX hoodMotorFollower;
+
   private CANcoder hoodEncoder;
 
   private Slot0Configs shooterConfig;
@@ -78,9 +85,24 @@ public class ShooterIOKraken implements ShooterIO {
 
   public ShooterIOKraken() {
 
-    shooterMotor = new TalonFX(ShooterConstants.shooterMotorID, "Turret");
-    hoodMotor = new TalonFX(ShooterConstants.hoodMotorID, "Turret");
-    hoodEncoder = new CANcoder(ShooterConstants.hoodEncoderID, "Turret");
+    topShooterMotorRight =
+        new TalonFX(ShooterConstants.topShooterMotorRightID, ShooterConstants.shooterCanbus);
+    topShooterMotorLeft =
+        new TalonFX(ShooterConstants.topShooterMotorLeftID, ShooterConstants.shooterCanbus);
+    topShooterMotorLeft.setControl(
+        new Follower(ShooterConstants.topShooterMotorRightID, MotorAlignmentValue.Opposed));
+    bottomShooterMotorRight =
+        new TalonFX(ShooterConstants.bottomShooterMotorRightID, ShooterConstants.shooterCanbus);
+    bottomShooterMotorRight.setControl(
+        new Follower(ShooterConstants.topShooterMotorRightID, MotorAlignmentValue.Aligned));
+    bottomShooterMotorLeft =
+        new TalonFX(ShooterConstants.bottomShooterMotorLeftID, ShooterConstants.shooterCanbus);
+    bottomShooterMotorLeft.setControl(
+        new Follower(ShooterConstants.topShooterMotorRightID, MotorAlignmentValue.Opposed));
+    hoodMotor = new TalonFX(ShooterConstants.hoodMotorID, ShooterConstants.shooterCanbus);
+    hoodMotorFollower =
+        new TalonFX(ShooterConstants.hoodMotorFollowerID, ShooterConstants.shooterCanbus);
+    hoodEncoder = new CANcoder(ShooterConstants.hoodEncoderID, ShooterConstants.shooterCanbus);
 
     shooterConfig =
         new Slot0Configs()
@@ -124,7 +146,7 @@ public class ShooterIOKraken implements ShooterIO {
     hoodMotorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
     hoodMotorConfig.Feedback.SensorToMechanismRatio = hoodToMotorRatio.get();
 
-    shooterMotor.getConfigurator().apply(shooterMotorConfig);
+    topShooterMotorRight.getConfigurator().apply(shooterMotorConfig);
     hoodMotor.getConfigurator().apply(hoodMotorConfig);
   }
 
@@ -141,7 +163,7 @@ public class ShooterIOKraken implements ShooterIO {
                   .withKA(shooterka.get())
                   .withKS(shooterks.get())
                   .withKV(shooterkv.get());
-          shooterMotor.getConfigurator().apply(shooterConfig);
+          topShooterMotorRight.getConfigurator().apply(shooterConfig);
         },
         shooterkp,
         shooterki,
@@ -158,7 +180,7 @@ public class ShooterIOKraken implements ShooterIO {
                   .withMotionMagicAcceleration(shooterMaxAccel.get())
                   .withMotionMagicCruiseVelocity(shooterMaxSpeed.get())
                   .withMotionMagicJerk(shooterJerk.get());
-          shooterMotor.getConfigurator().apply(shooterMotionMagicConfig);
+          topShooterMotorRight.getConfigurator().apply(shooterMotionMagicConfig);
         },
         shooterMaxAccel,
         shooterMaxSpeed,
@@ -211,7 +233,7 @@ public class ShooterIOKraken implements ShooterIO {
 
   @Override
   public void setShooterSpeed(double speed) {
-    shooterMotor.set(speed);
+    topShooterMotorRight.set(speed);
   }
 
   @Override
