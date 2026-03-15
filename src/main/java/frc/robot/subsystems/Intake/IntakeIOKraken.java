@@ -24,12 +24,13 @@ public class IntakeIOKraken implements IntakeIO {
 
   public IntakeIOKraken() {
     m_intakingMotor = new TalonFX(IntakeConstants.intakingMotorID, IntakeConstants.canbus);
-    m_intakingMotorFollow = new TalonFX(IntakeConstants.intakingMotorFollowID, IntakeConstants.canbus);
+    m_intakingMotorFollow =
+        new TalonFX(IntakeConstants.intakingMotorFollowID, IntakeConstants.canbus);
     m_intakingMotorFollow.setControl(
-      new Follower(IntakeConstants.intakingMotorID, MotorAlignmentValue.Opposed)
-    );
+        new Follower(IntakeConstants.intakingMotorID, MotorAlignmentValue.Opposed));
     m_rotationMotor = new TalonFX(IntakeConstants.rotationMotorID, IntakeConstants.canbus);
-    m_rotationMotorFollow = new TalonFX(IntakeConstants.rotationMotorFollowID, IntakeConstants.canbus);
+    m_rotationMotorFollow =
+        new TalonFX(IntakeConstants.rotationMotorFollowID, IntakeConstants.canbus);
     m_rotationMotorFollow.setControl(
         new Follower(IntakeConstants.rotationMotorID, MotorAlignmentValue.Opposed));
     m_pIDConfigs =
@@ -57,8 +58,7 @@ public class IntakeIOKraken implements IntakeIO {
 
   public void setAngle(double angleDegrees) {
     // still need to find the angle before this will work;
-    double motorRotations =
-        angleDegrees * IntakeConstants.rotationGearRatio / 360;
+    double motorRotations = angleDegrees * IntakeConstants.rotationGearRatio / 360;
 
     m_rotationMotor.setControl(m_requestedVoltage.withPosition(motorRotations));
   }
