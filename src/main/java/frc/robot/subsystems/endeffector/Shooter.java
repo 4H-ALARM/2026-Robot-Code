@@ -4,32 +4,31 @@
 
 package frc.robot.subsystems.endeffector;
 
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.endeffector.PhaseshiftIO.PhaseshiftIOInputs;
 import frc.robot.subsystems.targeting.ShootTargetIO;
+import frc.robot.subsystems.targeting.ShootTargetIO.ShootTargetIOInputs;
 
 public class Shooter extends SubsystemBase {
 
   private ShooterIO shooter;
   private Drive drive;
   private IndexerIO indexer;
-  private PhaseshiftIO phaseshift;
-  private PhaseshiftIOInputs phaseshiftInputs;
   private ShootTargetIO shootTarget;
+  private ShootTargetIOInputs shootTargetInputs;
 
   /** FIX DO NOT WANT TO IMPORT A WHOLE DRIVE */
-  public Shooter(ShooterIO shooter, Drive drive, IndexerIO indexer, PhaseshiftIO phaseshift, ShootTargetIO shootTarget) {
+  public Shooter(ShooterIO shooter, Drive drive, IndexerIO indexer, ShootTargetIO shootTarget) {
     this.shooter = shooter;
     this.drive = drive;
     this.indexer = indexer;
-    this.phaseshift = phaseshift;
     this.shootTarget = shootTarget;
   }
 
   @Override
   public void periodic() {
-    phaseshift.updateInputs(phaseshiftInputs);
+    shootTarget.updateInputs(shootTargetInputs);
   }
 
   public void spinShooter(double speed) {
@@ -46,5 +45,9 @@ public class Shooter extends SubsystemBase {
 
   public void setIndexerSpeed(double indexerSpeed) {
     indexer.setIndexerSpeed(indexerSpeed);
+  }
+
+  public void setTarget(Translation3d target, boolean targetAvailable) {
+    shootTarget.setTarget(target, targetAvailable);
   }
 }

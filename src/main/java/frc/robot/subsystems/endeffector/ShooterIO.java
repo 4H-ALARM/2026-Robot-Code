@@ -11,7 +11,7 @@ import org.littletonrobotics.junction.AutoLog;
 /** Add your docs here. */
 public interface ShooterIO {
   @AutoLog
-  public class ShooterIOInputs {
+  public static class ShooterIOInputs {
 
     public Rotation2d hoodAngleDegrees;
     public double shooterVelocityRPM;
