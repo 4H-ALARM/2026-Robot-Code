@@ -4,50 +4,47 @@
 
 package frc.robot.subsystems.endeffector;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.endeffector.PhaseshiftIO.PhaseshiftIOInputs;
+import frc.robot.subsystems.targeting.ShootTargetIO;
 
 public class Shooter extends SubsystemBase {
 
-  private TurretIOInputsAutoLogged turretInputs;
-  private TurretIO turret;
   private ShooterIO shooter;
   private Drive drive;
   private IndexerIO indexer;
-  private SpindexerIO m_spindexer;
+  private PhaseshiftIO phaseshift;
+  private PhaseshiftIOInputs phaseshiftInputs;
+  private ShootTargetIO shootTarget;
 
   /** FIX DO NOT WANT TO IMPORT A WHOLE DRIVE */
-  public Shooter(
-      ShooterIO shooter, TurretIO turret, Drive drive, IndexerIO indexer, SpindexerIO spindexer) {
-    this.turretInputs = new TurretIOInputsAutoLogged();
-    this.turret = turret;
+  public Shooter(ShooterIO shooter, Drive drive, IndexerIO indexer, PhaseshiftIO phaseshift, ShootTargetIO shootTarget) {
     this.shooter = shooter;
     this.drive = drive;
     this.indexer = indexer;
-    this.m_spindexer = spindexer;
+    this.phaseshift = phaseshift;
+    this.shootTarget = shootTarget;
   }
 
   @Override
   public void periodic() {
-    // this.turret.updateInputs(turretInputs);
-    // this.turret.turretPeriodic(drive.getPose());
-  }
-
-  public Rotation2d getTargetTurretAngle(Pose2d pose) {
-    return turret.getTargetTurretAngle(pose);
+    phaseshift.updateInputs(phaseshiftInputs);
   }
 
   public void spinShooter(double speed) {
     shooter.setShooterSpeed(speed);
   }
 
-  public void setIndexerSpeed(double indexerSpeed) {
-    indexer.setIndexerSpeed(indexerSpeed);
+  public void stopShooter() {
+    shooter.setShooterSpeed(0);
   }
 
-  public void setSpindexerSpeed(double speed) {
-    m_spindexer.setSpindexerSpeed(speed);
+  public void setHoodAngle(double hoodAngle) {
+    shooter.setHoodAngle(hoodAngle);
+  }
+
+  public void setIndexerSpeed(double indexerSpeed) {
+    indexer.setIndexerSpeed(indexerSpeed);
   }
 }
