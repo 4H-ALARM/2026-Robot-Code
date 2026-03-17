@@ -35,6 +35,8 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     phaseshift.updateInputs(phaseshiftInputs);
+    shooter.updateInputs(null);
+    indexer.updateInputs(null);
   }
 
   public void spinShooter(double speed) {

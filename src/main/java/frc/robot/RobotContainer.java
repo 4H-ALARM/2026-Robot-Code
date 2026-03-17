@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Constants.GenericConstants;
 import frc.lib.Constants.SwerveConstants;
@@ -169,8 +168,17 @@ public class RobotContainer {
     //     .whileFalse(new InstantCommand(() -> shooter.setIndexerSpeed(0)))
     //     .whileFalse(new InstantCommand(() -> shooter.spinShooter(0)))
     //     .whileFalse(new InstantCommand(() -> intake.setIntakeSpeed(0)));
-    PilotController.leftTrigger().onTrue(new InstantCommand(() -> intake.setRotationDown()));
-    PilotController.leftTrigger().onFalse(new InstantCommand(() -> intake.setRotationUp()));
+    PilotController.leftTrigger()
+        .whileTrue(
+            Commands.runEnd(
+                () -> shooter.spinShooter(1000 / 60), () -> shooter.spinShooter(0), shooter));
+    PilotController.rightTrigger()
+        .whileTrue(
+            Commands.runEnd(
+                () -> shooter.setIndexerSpeed(PilotController.getLeftY() * 0.5),
+                () -> shooter.setIndexerSpeed(0),
+                shooter,
+                drive));
 
     // Reset gyro to 0° when B button is pressed
     PilotController.b()
