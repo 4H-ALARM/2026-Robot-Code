@@ -171,11 +171,11 @@ public class RobotContainer {
     PilotController.leftTrigger()
         .whileTrue(
             Commands.runEnd(
-                () -> shooter.spinShooter(1000 / 60), () -> shooter.spinShooter(0), shooter));
+                () -> shooter.spinShooter(2000 / 60), () -> shooter.spinShooter(0), shooter));
     PilotController.rightTrigger()
         .whileTrue(
             Commands.runEnd(
-                () -> shooter.setIndexerSpeed(PilotController.getLeftY() * 0.5),
+                () -> shooter.setIndexerSpeed(PilotController.getLeftY()),
                 () -> shooter.setIndexerSpeed(0),
                 shooter,
                 drive));
