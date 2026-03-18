@@ -25,6 +25,10 @@ public interface IntakeIO {
 
   public void setAngle(double angleDegrees);
 
+  public default double getAngle() {
+    return 0;
+  }
+
   public void setIntakeSpeed(double speed);
 
   public void stopIntake();

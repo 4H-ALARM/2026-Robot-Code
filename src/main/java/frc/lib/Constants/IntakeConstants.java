@@ -8,7 +8,8 @@ package frc.lib.Constants;
 public class IntakeConstants {
 
   public static final double rotationGearRatio = 60.0 / 20.0;
-
+  public static final double intakeAngleWhileUp = 0.0;
+  public static final double intakeAngleWhileDown = 0.0;
   // Motor IDs
   public static final int rotationMotorID = 30;
   public static final int rotationMotorFollowID = 17;

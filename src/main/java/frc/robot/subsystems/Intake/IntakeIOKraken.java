@@ -63,6 +63,10 @@ public class IntakeIOKraken implements IntakeIO {
     m_rotationMotor.setControl(m_requestedVoltage.withPosition(motorRotations));
   }
 
+  public double getAngle() {
+    return m_rotationMotor.getPosition().getValueAsDouble() * IntakeConstants.rotationGearRatio / 360;
+  }
+
   public void setIntakeSpeed(double speed) {
     if (speed > 1) {
       speed = 1;
