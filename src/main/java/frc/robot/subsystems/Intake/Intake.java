@@ -51,6 +51,9 @@ public class Intake extends SubsystemBase {
   public void setRotationDown() {
     setAngle(m_downRotationDegrees.get());
   }
+  public double getAngle() {
+    return m_intakeIO.getAngle();
+  }
 
   public void setIntakeSpeed(double speed) {
     m_intakeIO.setIntakeSpeed(speed);
@@ -58,6 +61,10 @@ public class Intake extends SubsystemBase {
 
   public void stopIntake() {
     m_intakeIO.stopIntake();
+  }
+
+  public boolean isIntakeUp() {
+    return m_intakeIO.isIntakeUp();
   }
 
   public double getRotationDegrees() {

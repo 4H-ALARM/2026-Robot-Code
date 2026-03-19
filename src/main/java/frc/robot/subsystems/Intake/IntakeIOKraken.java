@@ -7,6 +7,7 @@ package frc.robot.subsystems.intake;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import frc.lib.Constants.BuildConstants;
 import frc.lib.Constants.IntakeConstants;
@@ -19,8 +20,11 @@ public class IntakeIOKraken implements IntakeIO {
   private final TalonFX m_rotationMotorFollow;
   private final TalonFX m_intakingMotor;
 
-  private Slot0Configs m_pIDConfigs;
+  private Slot0Configs m_rotationPIDConfigs;
+  private Slot0Configs m_intakingPIDConfigs;
   private final TalonFXConfiguration m_rotationMotorConfig;
+  private final TalonFXConfiguration m_intakingMotorConfig;
+  private final VelocityTorqueCurrentFOC m_requestedVelocity;
   private final PositionVoltage m_requestedPosition;
   private double m_requestedAngleDegrees = 0.0;
 
@@ -40,7 +44,7 @@ public class IntakeIOKraken implements IntakeIO {
         new TalonFX(IntakeConstants.rotationMotorFollowID, IntakeConstants.canbus);
     // m_rotationMotorFollow.setControl(
     //     new Follower(IntakeConstants.rotationMotorID, MotorAlignmentValue.Opposed));
-    m_pIDConfigs =
+    m_rotationPIDConfigs =
         new Slot0Configs()
             .withKP(rotationkp.get())
             .withKI(rotationki.get())
@@ -48,13 +52,26 @@ public class IntakeIOKraken implements IntakeIO {
             .withKV(IntakeConstants.angleMotorkv)
             .withKA(IntakeConstants.angleMotorka)
             .withKG(IntakeConstants.angleMotorkg);
+     m_intakingPIDConfigs =
+        new Slot0Configs()
+            .withKP(IntakeConstants.intakingMotorkp)
+            .withKI(IntakeConstants.intakingMotorki)
+            .withKD(IntakeConstants.intakingMotorkd)
+            .withKV(IntakeConstants.intakingMotorkv)
+            .withKA(IntakeConstants.intakingMotorka)
+            .withKS(IntakeConstants.intakingMotorks);
+
     // .withGravityType(GravityTypeValue.Arm_Cosine);
     m_rotationMotorConfig = new TalonFXConfiguration();
-    m_rotationMotorConfig.Slot0 = m_pIDConfigs;
+    m_intakingMotorConfig = new TalonFXConfiguration();
+    m_rotationMotorConfig.Slot0 = m_rotationPIDConfigs;
+    m_intakingMotorConfig.Slot0 = m_intakingPIDConfigs;
     m_rotationMotorConfig.Feedback.SensorToMechanismRatio = rotationGearRatio.get();
     m_rotationMotor.getConfigurator().apply(m_rotationMotorConfig);
     m_rotationMotorFollow.getConfigurator().apply(m_rotationMotorConfig);
+    m_intakingMotor.getConfigurator().apply(m_intakingMotorConfig);
     m_requestedPosition = new PositionVoltage(0).withSlot(0);
+    m_requestedVelocity = new VelocityTorqueCurrentFOC(0).withSlot(0);
   }
 
   public void resetEncoder() {
@@ -80,19 +97,22 @@ public class IntakeIOKraken implements IntakeIO {
         m_requestedPosition.withPosition(-angleDegrees / 360).withEnableFOC(true));
   }
 
-  public void setIntakeSpeed(double speed) {
-    if (speed > 1) {
-      speed = 1;
-    }
-    if (speed < -1) {
-      speed = -1;
-    }
-    m_intakingMotor.set(speed);
+  public double getAngle() {
+    return m_rotationMotor.getPosition().getValueAsDouble() / IntakeConstants.rotationGearRatio * 360;
+  }
+
+  public void setIntakeSpeed(double speedInRPS) {
+    m_intakingMotor.setControl(m_requestedVelocity.withVelocity(speedInRPS));
+    //m_intakingMotor.set(speedInRPS);
   }
 
   public void stopIntake() {
 
     m_intakingMotor.set(0);
+  }
+
+  public boolean isIntakeUp() {
+    return getAngle() < IntakeConstants.rotationDownDegrees / 4;
   }
 
   @Override
@@ -101,12 +121,12 @@ public class IntakeIOKraken implements IntakeIO {
       LoggedTunableNumber.ifChanged(
           hashCode(),
           () -> {
-            m_pIDConfigs =
+            m_rotationPIDConfigs =
                 new Slot0Configs()
                     .withKP(rotationkp.get())
                     .withKI(rotationki.get())
                     .withKD(rotationkd.get());
-            m_rotationMotor.getConfigurator().apply(m_pIDConfigs);
+            m_rotationMotor.getConfigurator().apply(m_rotationPIDConfigs);
           },
           rotationkp,
           rotationki,
