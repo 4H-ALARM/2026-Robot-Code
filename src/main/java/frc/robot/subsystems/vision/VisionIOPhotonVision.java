@@ -21,6 +21,8 @@ import org.photonvision.PhotonCamera;
 
 /** IO implementation for real PhotonVision hardware. */
 public class VisionIOPhotonVision implements VisionIO {
+  private static final int MAX_RESULTS_PER_LOOP = 1;
+
   protected final PhotonCamera camera;
   protected final Transform3d robotToCamera;
 
@@ -62,11 +64,14 @@ public class VisionIOPhotonVision implements VisionIO {
     }
 
     Set<Short> tagIds = new HashSet<>();
-    List<PoseObservation> poseObservations = new ArrayList<>(unreadResults.size());
+    int resultsToProcess = Math.min(unreadResults.size(), MAX_RESULTS_PER_LOOP);
+    int startIndex = unreadResults.size() - resultsToProcess;
+    List<PoseObservation> poseObservations = new ArrayList<>(resultsToProcess);
     if (unreadResults.isEmpty()) {
       inputs.latestTargetObservation = new TargetObservation(Rotation2d.kZero, Rotation2d.kZero);
     }
-    for (var result : unreadResults) {
+    for (int resultIndex = startIndex; resultIndex < unreadResults.size(); resultIndex++) {
+      var result = unreadResults.get(resultIndex);
       // Update latest target observation
       if (result.hasTargets()) {
         inputs.latestTargetObservation =

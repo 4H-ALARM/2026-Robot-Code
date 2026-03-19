@@ -98,6 +98,8 @@ public class IntakeIOKraken implements IntakeIO {
         50.0, m_rotationPosition, m_rotationVelocity, m_rotationFollowerPosition, m_intakingVelocity);
     ParentDevice.optimizeBusUtilizationForAll(
         m_rotationMotor, m_rotationMotorFollow, m_intakingMotor);
+
+    resetEncoder();
   }
 
   public void resetEncoder() {
@@ -170,14 +172,14 @@ public class IntakeIOKraken implements IntakeIO {
   }
 
   public void updateInputs(IntakeIOInputs inputs) {
-    var rotationStatus = BaseStatusSignal.refreshAll(m_rotationPosition, m_rotationVelocity);
-    var followerStatus = BaseStatusSignal.refreshAll(m_rotationFollowerPosition);
-    var intakingStatus = BaseStatusSignal.refreshAll(m_intakingVelocity);
+    var status =
+        BaseStatusSignal.refreshAll(
+            m_rotationPosition, m_rotationVelocity, m_rotationFollowerPosition, m_intakingVelocity);
 
-    inputs.rotationMotorConnected = m_rotationMotorConnectedDebounce.calculate(rotationStatus.isOK());
-    inputs.intakingMotorConnected = m_intakingMotorConnectedDebounce.calculate(intakingStatus.isOK());
+    inputs.rotationMotorConnected = m_rotationMotorConnectedDebounce.calculate(status.isOK());
+    inputs.intakingMotorConnected = m_intakingMotorConnectedDebounce.calculate(status.isOK());
     inputs.rotationMotorFollowerConnected =
-        m_rotationFollowerConnectedDebounce.calculate(followerStatus.isOK());
+        m_rotationFollowerConnectedDebounce.calculate(status.isOK());
     inputs.rotationDegrees = m_rotationPosition.getValueAsDouble() * 360.0;
     inputs.rotationSpeedDegreesPerSecond = m_rotationVelocity.getValueAsDouble() * 360.0;
     inputs.rotationSetpointDegrees = m_requestedAngleDegrees;

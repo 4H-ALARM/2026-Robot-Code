@@ -18,6 +18,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.vision.VisionIO.PoseObservationType;
 import java.util.ArrayList;
@@ -65,6 +66,22 @@ public class Vision extends SubsystemBase {
     for (int i = 0; i < io.length; i++) {
       io[i].updateInputs(inputs[i]);
       Logger.processInputs("Vision/Camera" + Integer.toString(i), inputs[i]);
+    }
+
+    if (DriverStation.isDisabled()) {
+      int totalUnreadResults = 0;
+      for (int cameraIndex = 0; cameraIndex < io.length; cameraIndex++) {
+        disconnectedAlerts[cameraIndex].set(!inputs[cameraIndex].connected);
+
+        String cameraKey = "Vision/Camera" + Integer.toString(cameraIndex);
+        totalUnreadResults += inputs[cameraIndex].unreadResultCount;
+        Logger.recordOutput(cameraKey + "/UnreadResultCount", inputs[cameraIndex].unreadResultCount);
+        Logger.recordOutput(cameraKey + "/ObservationCount", 0);
+        Logger.recordOutput(cameraKey + "/TagCount", 0);
+      }
+      Logger.recordOutput("Vision/Summary/ObservationCount", 0);
+      Logger.recordOutput("Vision/Summary/UnreadResultCount", totalUnreadResults);
+      return;
     }
 
     // Initialize logging values
