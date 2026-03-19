@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "TopTrenchToMid"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HalfTopSweep"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CrossTopBump"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AllianceBumpToTrench"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "TopScrape"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CrossTopBump"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
