@@ -64,6 +64,8 @@ public class Shooter extends SubsystemBase {
     Pose2d robotPose = drive.getPose();
     Translation2d targetXY =
         new Translation2d(shootTarget.getTarget().getX(), shootTarget.getTarget().getY());
+
+    Logger.recordOutput("Shooter/targetpost", shootTarget.getTarget());
     return robotPose.getTranslation().getDistance(targetXY);
   }
 

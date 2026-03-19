@@ -13,8 +13,8 @@ import edu.wpi.first.math.geometry.Translation3d;
 /** Add your docs here. */
 public class GenericConstants {
   // field constants
-  public static final double MIDY = Inches.of(317.69 / 2).in(Meters);
-  public static final double HUBX = Inches.of(182.11).in(Meters);
+  public static final double MIDY = 4.709;
+  public static final double HUBX = 4.7;
   public static final double MIDX = Inches.of(325.61).in(Meters);
 
   // field poses

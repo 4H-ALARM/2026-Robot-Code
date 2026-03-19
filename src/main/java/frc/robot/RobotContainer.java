@@ -35,6 +35,10 @@ import frc.robot.subsystems.endeffector.PhaseshiftIO;
 import frc.robot.subsystems.endeffector.Shooter;
 import frc.robot.subsystems.endeffector.ShooterIOKraken;
 import frc.robot.subsystems.targeting.ShootTargetIO;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIO;
+import frc.robot.subsystems.vision.VisionIOPhotonVision;
+import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -47,6 +51,7 @@ public class RobotContainer {
   private final Drive drive;
   private final Shooter shooter;
   private final Intake intake;
+  private final Vision vision;
   private final ShootTargetIO shootTarget = new ShootTargetIO(GenericConstants.HUB_POSE3D, true);
   private SwerveDriveKinematics swerveKinematics;
 
@@ -68,11 +73,11 @@ public class RobotContainer {
                 new ModuleIOTalonFX(SwerveConstants.BackLeft),
                 new ModuleIOTalonFX(SwerveConstants.BackRight));
 
-        // vision =
-        //     new Vision(
-        //         drive::addVisionMeasurement,
-        //         new VisionIOPhotonVision(camera0Name, robotToCamera0),
-        //         new VisionIOPhotonVision(camera1Name, robotToCamera1));
+        vision =
+            new Vision(
+                drive::addVisionMeasurement,
+                new VisionIOPhotonVision(camera0Name, robotToCameraL),
+                new VisionIOPhotonVision(camera1Name, robotToCameraR));
 
         shooter =
             new Shooter(
@@ -96,11 +101,11 @@ public class RobotContainer {
                 new ModuleIOSim(SwerveConstants.BackLeft),
                 new ModuleIOSim(SwerveConstants.BackRight));
 
-        // vision =
-        //     new Vision(
-        //         drive::addVisionMeasurement,
-        //         new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
-        //         new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
+        vision =
+            new Vision(
+                drive::addVisionMeasurement,
+                new VisionIOPhotonVisionSim(camera0Name, robotToCameraL, drive::getPose),
+                new VisionIOPhotonVisionSim(camera1Name, robotToCameraR, drive::getPose));
         shooter =
             new Shooter(
                 new ShooterIOKraken(),
@@ -134,6 +139,10 @@ public class RobotContainer {
                 shootTarget);
 
         intake = new Intake(new IntakeIOKraken());
+
+        vision = new Vision(drive::addVisionMeasurement,
+            new VisionIO() {},
+            new VisionIO() {});
         break;
     }
 
@@ -177,7 +186,11 @@ public class RobotContainer {
     PilotController.leftTrigger()
         .whileTrue(
             Commands.runEnd(() -> shooter.spinShooter(1750 / 60), () -> shooter.stopShooter()));
+
     PilotController.rightTrigger()
+        .whileTrue(
+            Commands.runEnd(() -> shooter.setIndexerSpeed(-5900 / 60), () -> shooter.setIndexerSpeed(0)));
+    PilotController.rightBumper()
         .whileTrue(
             AutoShoot.autoShoot(
                 shooter,
@@ -186,7 +199,7 @@ public class RobotContainer {
                 () -> -PilotController.getLeftX()));
     PilotController.leftBumper()
         .whileTrue(
-            Commands.runEnd(() -> intake.setIntakeSpeed(-5900/60), () -> intake.setIntakeSpeed(0), intake));
+            Commands.runEnd(() -> intake.setIntakeSpeed(-3000/60), () -> intake.setIntakeSpeed(0), intake));
     // PilotController.rightBumper()
     //     .onTrue(deployIntake);
 

@@ -39,7 +39,7 @@ public class AutoShoot {
                       shooter.getShootTarget().getTarget().getX(),
                       shooter.getShootTarget().getTarget().getY());
               Translation2d toTarget = targetXY.minus(robotXY);
-              return new Rotation2d(toTarget.getX(), toTarget.getY());
+              return new Rotation2d(toTarget.getX(), toTarget.getY()).rotateBy(new Rotation2d(Math.PI));
             }))
         .finallyDo(() -> shooter.stopShooter());
   }
