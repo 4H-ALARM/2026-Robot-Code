@@ -170,11 +170,11 @@ public class RobotContainer {
     //     .whileFalse(new InstantCommand(() -> intake.setIntakeSpeed(0)));
     PilotController.leftTrigger()
         .whileTrue(
-            Commands.runEnd(() -> shooter.spinShooter(3000 / 60), () -> shooter.spinShooter(0)));
+            Commands.runEnd(() -> shooter.spinShooter(1750 / 60), () -> shooter.stopShooter()));
     PilotController.rightTrigger()
         .whileTrue(
             Commands.runEnd(
-                () -> shooter.setIndexerSpeed(-1), () -> shooter.setIndexerSpeed(0), drive));
+                () -> shooter.setIndexerSpeed(-8000/60), () -> shooter.setIndexerSpeed(0), drive));
 
     // Reset gyro to 0° when B button is pressed
     PilotController.b()
