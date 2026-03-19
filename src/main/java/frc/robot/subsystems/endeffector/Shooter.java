@@ -16,6 +16,7 @@ public class Shooter extends SubsystemBase {
   private PhaseshiftIO phaseshift;
   private PhaseshiftIOInputsAutoLogged phaseshiftInputs;
   private ShootTargetIO shootTarget;
+  public double shooterSpeed;
 
   /** FIX DO NOT WANT TO IMPORT A WHOLE DRIVE */
   public Shooter(
@@ -39,7 +40,11 @@ public class Shooter extends SubsystemBase {
     indexer.updateInputs(null);
   }
 
-  public void spinShooter(double speed) {
+  public void spinShooter() {
+    shooter.setShooterSpeed(shooterSpeed);
+  }
+
+  public void spinShooterAtSpeed(double speed) {
     shooter.setShooterSpeed(speed);
   }
 
@@ -53,5 +58,13 @@ public class Shooter extends SubsystemBase {
 
   public void setIndexerSpeed(double indexerSpeedInRPS) {
     indexer.setIndexerSpeed(indexerSpeedInRPS);
+  }
+  
+  public void changeShooterSpeed(double speed) {
+    shooterSpeed += speed;
+  }
+
+  public void setShooterSpeed(double speed) {
+    shooterSpeed = speed;
   }
 }

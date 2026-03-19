@@ -175,7 +175,7 @@ public class RobotContainer {
     //     .whileFalse(new InstantCommand(() -> intake.setIntakeSpeed(0)));
     PilotController.leftTrigger()
         .whileTrue(
-            Commands.runEnd(() -> shooter.spinShooter(1750 / 60), () -> shooter.stopShooter()));
+            Commands.runEnd(() -> shooter.spinShooterAtSpeed(3000 / 60), () -> shooter.spinShooterAtSpeed(0)));
     PilotController.rightTrigger()
         .whileTrue(
             Commands.runEnd(
