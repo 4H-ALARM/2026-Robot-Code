@@ -90,6 +90,8 @@ public class RobotContainer {
   private final Trigger pilotLeftTrigger = PilotController.leftTrigger();
   private final Trigger pilotLeftBumper = PilotController.leftBumper();
   private final Trigger pilotB = PilotController.b();
+  private final Trigger operatorB = OperatorController.b();
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -198,6 +200,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("Shoot", autoShootCommand);
     NamedCommands.registerCommand("Deploy intake", deployIntakeAuto);
     NamedCommands.registerCommand("Intake", intakeCommandAuto);
+
+    operatorB.getAsBoolean();
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
