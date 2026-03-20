@@ -7,8 +7,11 @@ package frc.robot.subsystems.endeffector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Constants.GenericConstants;
+import frc.robot.commands.RumbleController;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.targeting.ShootTargetIO;
 import org.littletonrobotics.junction.Logger;
@@ -30,6 +33,7 @@ public class Shooter extends SubsystemBase {
   private PhaseshiftIO phaseshift;
   private PhaseshiftIOInputsAutoLogged phaseshiftInputs;
   private ShootTargetIO shootTarget;
+  private CommandXboxController controller;
 
   /** FIX DO NOT WANT TO IMPORT A WHOLE DRIVE */
   public Shooter(
@@ -37,7 +41,9 @@ public class Shooter extends SubsystemBase {
       Drive drive,
       IndexerIO indexer,
       PhaseshiftIO phaseshift,
-      ShootTargetIO shootTarget) {
+      ShootTargetIO shootTarget,
+      CommandXboxController controller
+      ) {
     this.shooter = shooter;
     this.drive = drive;
     this.indexer = indexer;
@@ -46,18 +52,23 @@ public class Shooter extends SubsystemBase {
     this.phaseshiftInputs = new PhaseshiftIOInputsAutoLogged();
     this.shooterInputs = new ShooterIOInputsAutoLogged();
     this.indexerInputs = new IndexerIOInputsAutoLogged();
+    this.controller = controller;
 
     // Distance (meters) -> RPM calibration points for quadratic interpolation
     // TODO: tune these values with real testing
-    shootTarget.setTarget(GenericConstants.HUB_POSE3D, true);
+    // shootTarget.setTarget(GenericConstants.HUB_POSE3D, true);
   }
 
   @Override
   public void periodic() {
      phaseshift.updateInputs(phaseshiftInputs);
 
+     if(getPhaseTime()==10){ 
+      new RumbleController(controller, .5, 1);
+      
+     }
      if(getPhaseTime()==5){
-
+        new RumbleController(controller, 5, 1);
      }
      shooter.updateInputs(shooterInputs);
      indexer.updateInputs(indexerInputs);
