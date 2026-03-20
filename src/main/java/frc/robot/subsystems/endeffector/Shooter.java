@@ -55,6 +55,10 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
      phaseshift.updateInputs(phaseshiftInputs);
+
+     if(getPhaseTime()==5){
+
+     }
      shooter.updateInputs(shooterInputs);
      indexer.updateInputs(indexerInputs);
     Logger.processInputs("PhaseShift", phaseshiftInputs);

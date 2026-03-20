@@ -16,35 +16,40 @@ public class RumbleController extends Command {
   private CommandXboxController m_controller;
   private double m_rumbleTime;
   private double m_rumbleIntensity;
-  private double m_startTime;
+  private Timer m_timer;
 
   /** Creates a new rumbleController. */
   public RumbleController(CommandXboxController controller, double rumbleTime, double rumbleIntensity) {
     this.m_controller = controller;
     this.m_rumbleTime = rumbleTime;
     this.m_rumbleIntensity = rumbleIntensity;
+    m_timer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_startTime = DriverStation.getMatchTime();
+    m_timer.reset();
+    m_timer.start();
+    m_controller.setRumble(RumbleType.kBothRumble, m_rumbleIntensity);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_controller.setRumble(RumbleType.kBothRumble, m_rumbleIntensity);
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_controller.setRumble(RumbleType.kBothRumble, 0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return DriverStation.getMatchTime() == m_startTime-m_rumbleTime;
+      return m_timer.hasElapsed(m_rumbleTime);
   }
 }

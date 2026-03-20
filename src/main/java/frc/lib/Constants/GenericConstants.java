@@ -14,13 +14,16 @@ import edu.wpi.first.math.geometry.Translation3d;
 public class GenericConstants {
   // field constants
   public static final double MIDY = Inches.of(317.69 / 2).in(Meters);
-  public static final double HUBX = Inches.of(182.11).in(Meters);
+  public static final double REDHUBX = Inches.of(182.11).in(Meters);
   public static final double MIDX = Inches.of(325.61).in(Meters);
+  public static final double BLUEHUBX = Inches.of(651.22-182.11).in(Meters);
 
   // field poses
-  public static final double MIDALLIANCE = HUBX / 2;
-  public static final Translation3d HUB_POSE3D =
-      new Translation3d(HUBX, MIDY, Inches.of(72).in(Meters));
+  public static final double MIDALLIANCE = REDHUBX / 2;
+  public static final Translation3d REDHUB_POSE3D =
+      new Translation3d(REDHUBX, MIDY, Inches.of(72).in(Meters));
+  public static final Translation3d BLUEHUB_POSE3D = 
+      new Translation3d(BLUEHUBX, MIDY, Inches.of(72).in(Meters));
   public static final Translation3d LEFTALLIANCE = new Translation3d(MIDALLIANCE, MIDY * .5, 0);
   public static final Translation3d CENTERALLIANCE = new Translation3d(MIDALLIANCE, MIDY, 0);
   public static final Translation3d RIGHTALLIANCE = new Translation3d(MIDALLIANCE, MIDY * 1.5, 0);
