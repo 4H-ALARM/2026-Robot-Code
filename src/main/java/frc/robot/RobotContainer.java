@@ -74,6 +74,7 @@ public class RobotContainer {
   private final Command indexerReverseCommand;
   private final Command autoShootCommand;
   private final Command intakeCommand;
+  private final Command ejectCommand;
   private final Command intakeCommandAuto;
   private final Command resetGyroCommand;
   private final Command ShootCommand;
@@ -188,6 +189,8 @@ public class RobotContainer {
     ShootCommand = AutoShoot.autoShoot(shooter, drive, pilotForwardInput, pilotStrafeInput);
     intakeCommand =
         Commands.runEnd(() -> intake.setIntakeSpeed(-5900 / 60), () -> intake.setIntakeSpeed(0), intake);
+    ejectCommand =
+        Commands.runEnd(() -> intake.setIntakeSpeed(3000 / 60), () -> intake.setIntakeSpeed(0), intake);
     intakeCommandAuto =
         Commands.runEnd(() -> intake.setIntakeSpeed(-5900 / 60), () -> intake.setIntakeSpeed(0), intake);
     resetGyroCommand =
@@ -243,7 +246,7 @@ public class RobotContainer {
             ShootCommand);
     PilotController.leftTrigger()
         .toggleOnTrue(
-            Commands.runEnd(() -> intake.setIntakeSpeed(-5900/60), () -> intake.setIntakeSpeed(0), intake));
+            intakeCommand);
     PilotController.leftBumper()
         .onTrue(deployIntake);
 
@@ -252,6 +255,10 @@ public class RobotContainer {
         .whileTrue(
             Commands.runEnd(
                 () -> shooter.spinShooter(2500/60), () -> shooter.stopShooter())
+        );
+    OperatorController.leftBumper()
+        .whileTrue(
+            ejectCommand
         );
 
     // Reset gyro to 0° when B button is pressed
