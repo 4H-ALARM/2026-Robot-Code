@@ -280,5 +280,11 @@ public class ShooterIOKraken implements ShooterIO {
     inputs.topLeftMotorIsConnected = topShooterMotorLeft.isConnected();
     inputs.bottomRightMotorIsConnected = bottomShooterMotorRight.isConnected();
     inputs.bottomLeftMotorIsConnected = bottomShooterMotorLeft.isConnected();
+    // current levels for motor
+
+    inputs.topRightMotorCurrent = topShooterMotorRight.getStatorCurrent().getValueAsDouble();
+    inputs.topLeftMotorCurrent = topShooterMotorLeft.getStatorCurrent().getValueAsDouble();
+    inputs.bottomRightMotorCurrent = bottomShooterMotorRight.getStatorCurrent().getValueAsDouble();
+    inputs.bottomLeftMotorCurrent = bottomShooterMotorLeft.getStatorCurrent().getValueAsDouble();
   }
 }

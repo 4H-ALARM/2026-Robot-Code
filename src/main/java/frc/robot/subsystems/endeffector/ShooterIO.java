@@ -20,6 +20,10 @@ public interface ShooterIO {
     public boolean bottomLeftMotorIsConnected;
     public boolean bottomRightMotorIsConnected;
     public boolean hoodMotorIsConnected;
+    public double topLeftMotorCurrent;
+    public double topRightMotorCurrent;
+    public double bottomLeftMotorCurrent;
+    public double bottomRightMotorCurrent;
   }
 
   public default Rotation2d getHoodAngle() {
