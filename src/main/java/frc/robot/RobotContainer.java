@@ -184,7 +184,7 @@ public class RobotContainer {
             drive, pilotForwardInput, pilotStrafeInput, pilotRotateInput);
     indexerReverseCommand =
         Commands.runEnd(() -> shooter.setIndexerSpeed(-5900 / 60), () -> shooter.setIndexerSpeed(0));
-    autoShootCommand = AutoShoot.autoShoot(shooter, drive, pilotForwardInput, pilotStrafeInput).withTimeout(5);
+    autoShootCommand = AutoShoot.autoShoot(shooter, drive, pilotForwardInput, pilotStrafeInput).withTimeout(4);
     ShootCommand = AutoShoot.autoShoot(shooter, drive, pilotForwardInput, pilotStrafeInput);
     intakeCommand =
         Commands.runEnd(() -> intake.setIntakeSpeed(-5900 / 60), () -> intake.setIntakeSpeed(0), intake);
@@ -243,7 +243,7 @@ public class RobotContainer {
             ShootCommand);
     PilotController.leftTrigger()
         .toggleOnTrue(
-            Commands.runEnd(() -> intake.setIntakeSpeed(-4000/60), () -> intake.setIntakeSpeed(0), intake));
+            Commands.runEnd(() -> intake.setIntakeSpeed(-5900/60), () -> intake.setIntakeSpeed(0), intake));
     PilotController.leftBumper()
         .onTrue(deployIntake);
 
