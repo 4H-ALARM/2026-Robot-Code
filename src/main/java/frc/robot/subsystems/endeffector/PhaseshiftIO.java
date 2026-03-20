@@ -1,7 +1,11 @@
 package frc.robot.subsystems.endeffector;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.endeffector.PhaseshiftIO.PhaseshiftIOInputs.AutoWinner;
 import java.util.Optional;
 import org.littletonrobotics.junction.AutoLog;
@@ -11,7 +15,7 @@ public class PhaseshiftIO {
   public static final double graceStartPeriod = 0;
   // time after current phase where the hub will register scoring fuel.
   public static final double graceEndPeriod = 3;
-
+  public double m_phaseTime;
   @AutoLog
   public static class PhaseshiftIOInputs {
     public enum AutoWinner {
@@ -26,7 +30,7 @@ public class PhaseshiftIO {
   }
 
   public void updateInputs(PhaseshiftIOInputs inputs) {
-
+    m_phaseTime = inputs.phaseTimeRemaining;
     Optional<Alliance> alliance = DriverStation.getAlliance();
     // If we have no alliance, we cannot be enabled, therefore no hub.
     if (alliance.isEmpty()) {
@@ -102,5 +106,8 @@ public class PhaseshiftIO {
       inputs.myHubActive = true;
       inputs.phaseTimeRemaining = matchTime;
     }
+  }
+  public double getPhaseTime(){
+    return m_phaseTime;
   }
 }
