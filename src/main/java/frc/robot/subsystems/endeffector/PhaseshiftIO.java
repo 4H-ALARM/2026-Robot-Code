@@ -83,7 +83,8 @@ public class PhaseshiftIO {
     if (matchTime > 130) {
       // Transition shift, hub is active.
       inputs.myHubActive = true;
-      inputs.phaseTimeRemaining = matchTime - 130;
+      // if shift1 is active, then our active shift lasts until the end of shift 1.
+      inputs.phaseTimeRemaining = matchTime - (shift1Active ? 105 : 130);
     } else if (matchTime > 105) {
       // Shift 1
       inputs.myHubActive = shift1Active;
@@ -99,13 +100,9 @@ public class PhaseshiftIO {
       inputs.phaseTimeRemaining = matchTime - 55;
     } else if (matchTime > 30) {
       // Shift 4
-      if (shift1Active = false){
-        inputs.myHubActive = true;
-        inputs.phaseTimeRemaining = matchTime;
-        return;
-      }
       inputs.myHubActive = !shift1Active;
-      inputs.phaseTimeRemaining = matchTime - 30;
+      // if we are active for shift 4, the active shift lasts the rest of the game.
+      inputs.phaseTimeRemaining = matchTime - (shift1Active ? 30 : 0);
     } else {
       // End game, hub always active.
       inputs.myHubActive = true;
