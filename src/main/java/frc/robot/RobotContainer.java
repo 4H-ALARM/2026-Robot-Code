@@ -78,6 +78,7 @@ public class RobotContainer {
   private final Command intakeCommandAuto;
   private final Command resetGyroCommand;
   private final Command ShootCommand;
+  private final Command ShootFromTowerCommand;
 
 
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -201,6 +202,8 @@ public class RobotContainer {
                 () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
                 drive)
             .ignoringDisable(true);
+    ShootFromTowerCommand =
+        Commands.runEnd(() -> shooter.spinShooter(1825), () -> shooter.stopShooter(), shooter);
     NamedCommands.registerCommand("Shoot", autoShootCommand);
     NamedCommands.registerCommand("Deploy intake", deployIntakeAuto);
     NamedCommands.registerCommand("Intake", intakeCommandAuto);
@@ -258,6 +261,10 @@ public class RobotContainer {
         .whileTrue(
             Commands.runEnd(
                 () -> shooter.spinShooter(2500/60), () -> shooter.stopShooter())
+        );
+    OperatorController.rightTrigger()
+        .whileTrue(
+            ShootFromTowerCommand
         );
     OperatorController.leftBumper()
         .whileTrue(
