@@ -116,7 +116,8 @@ public class RobotContainer {
                 drive,
                 new IndexerIOKraken(),
                 new PhaseshiftIO(),
-                shootTarget);
+                shootTarget,
+                PilotController);
 
         intake = new Intake(new IntakeIOKraken());
         break;
@@ -143,7 +144,8 @@ public class RobotContainer {
                 drive,
                 new IndexerIOKraken(),
                 new PhaseshiftIO(),
-                shootTarget);
+                shootTarget,
+                PilotController);
 
         intake = new Intake(new IntakeIOKraken());
         break;
@@ -167,7 +169,8 @@ public class RobotContainer {
                 drive,
                 new IndexerIOKraken(),
                 new PhaseshiftIO(),
-                shootTarget);
+                shootTarget,
+                PilotController);
 
         intake = new Intake(new IntakeIOKraken());
 

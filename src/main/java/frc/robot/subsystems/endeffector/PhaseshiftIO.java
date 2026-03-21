@@ -99,6 +99,11 @@ public class PhaseshiftIO {
       inputs.phaseTimeRemaining = matchTime - 55;
     } else if (matchTime > 30) {
       // Shift 4
+      if (shift1Active = false){
+        inputs.myHubActive = true;
+        inputs.phaseTimeRemaining = matchTime;
+        return;
+      }
       inputs.myHubActive = !shift1Active;
       inputs.phaseTimeRemaining = matchTime - 30;
     } else {

@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Constants.GenericConstants;
@@ -34,6 +35,7 @@ public class Shooter extends SubsystemBase {
   private PhaseshiftIOInputsAutoLogged phaseshiftInputs;
   private ShootTargetIO shootTarget;
   private CommandXboxController controller;
+  private double lastPhaseTime;
 
   /** FIX DO NOT WANT TO IMPORT A WHOLE DRIVE */
   public Shooter(
@@ -63,13 +65,16 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
      phaseshift.updateInputs(phaseshiftInputs);
 
-     if(getPhaseTime()==10){ 
-      new RumbleController(controller, .5, 1);
-      
+     var newPhaseTime = getPhaseTime();
+     if(newPhaseTime <= 10 && lastPhaseTime > 10 && phaseshiftInputs.myHubActive == false){
+      // new RumbleController(controller, .5, 1);
+      CommandScheduler.getInstance().schedule(new RumbleController(controller, .5, 1));
+
      }
-     if(getPhaseTime()==5){
-        new RumbleController(controller, 5, 1);
+     if(newPhaseTime <= 5 && lastPhaseTime > 5 && phaseshiftInputs.myHubActive == false){
+        CommandScheduler.getInstance().schedule(new RumbleController(controller, 5, 1));
      }
+     lastPhaseTime = newPhaseTime;
      shooter.updateInputs(shooterInputs);
      indexer.updateInputs(indexerInputs);
     Logger.processInputs("PhaseShift", phaseshiftInputs);
