@@ -108,14 +108,11 @@ public class IntakeIOKraken implements IntakeIO {
     m_requestedAngleDegrees = 0.0;
   }
 
-  public void changeAngleTest(double speed) {
-    if (speed > 1) {
-      speed = 1;
-    }
-    if (speed < -1) {
-      speed = -1;
-    }
-    m_rotationMotor.set(speed);
+  public void changeAngleTest(double angleDegrees) {
+    m_rotationMotor.setControl(
+        m_requestedPosition.withPosition(angleDegrees / 360).withFeedForward(1));
+    m_rotationMotorFollow.setControl(
+        m_requestedPosition.withPosition(-angleDegrees / 360).withFeedForward(1));
   }
 
   public void setAngle(double angleDegrees) {

@@ -22,7 +22,7 @@ public interface IntakeIO {
 
   public void resetEncoder();
 
-  public void changeAngleTest(double speed);
+  public void changeAngleTest(double angleDegrees);
 
   public void setAngle(double angleDegrees);
 
