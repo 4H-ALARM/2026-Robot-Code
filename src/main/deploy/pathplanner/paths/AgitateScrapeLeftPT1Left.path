@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.162952924393723,
-        "y": 5.4647218259629105
+        "x": 2.899391771019678,
+        "y": 5.681878354203935
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5099821109123432,
-        "y": 7.434221824686941
+        "x": 3.246420957538298,
+        "y": 7.651378352927965
       },
       "isLocked": false,
       "linkedName": "AllianceTopBump"
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 6.160697674418604,
-        "y": 6.606726296958855
+        "x": 6.939516994633274,
+        "y": 6.687853309481216
       },
       "prevControl": {
-        "x": 5.965992844364938,
-        "y": 7.5054513416815745
+        "x": 6.744812164579607,
+        "y": 7.586578354203936
       },
       "nextControl": null,
       "isLocked": false,
@@ -50,7 +50,21 @@
       "rotationDegrees": 0.0
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
