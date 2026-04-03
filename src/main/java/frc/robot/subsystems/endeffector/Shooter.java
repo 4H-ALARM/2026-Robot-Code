@@ -33,12 +33,23 @@ public class Shooter extends SubsystemBase {
   private static final double HOOD_COMMAND_EPSILON_DEGREES = 0.1;
   private static final double HOOD_MIN_ANGLE_DEGREES = -30.0;
   private static final double HOOD_MAX_ANGLE_DEGREES = 0.0;
-  private static final int QUADRATIC_POINT_COUNT = 3;
   private static final LookupPoint[] LOOKUP_POINTS = {
-    new LookupPoint(2.35, 1825.0, 00),
-    new LookupPoint(3.11, 1875.0, 0),
-    new LookupPoint(3.84, 2075.0, 0)
+    new LookupPoint(3.55, 2075, 0.0),
+    new LookupPoint(3.07, 1875, 0.0),
+    new LookupPoint(2.75, 1825, 0.0),
+    new LookupPoint(4.0,2250, 0.0),
+    new LookupPoint(4.26, 2150, 25.0),
+    new LookupPoint(3.46, 2000, 0.0),
+    new LookupPoint(3.67, 2100, 0.0),
+    new LookupPoint(3.84, 2000, 20.0),
+    new LookupPoint(3.66, 1950, 15.0),
+    new LookupPoint(2.6, 1775, 0.0)
   };
+  private static final LookupPoint[] SORTED_LOOKUP_POINTS =
+      Arrays.stream(LOOKUP_POINTS)
+          .sorted(Comparator.comparingDouble(LookupPoint::distanceMeters))
+          .toArray(LookupPoint[]::new);
+  private static final double[] MONOTONIC_HOOD_PERCENTS = buildMonotonicHoodPercents();
 
   private ShooterIO shooter;
   private ShooterIOInputsAutoLogged shooterInputs;
@@ -142,16 +153,15 @@ public class Shooter extends SubsystemBase {
     return robotPose.getTranslation().getDistance(targetXY);
   }
 
-  /** Returns the quadratically interpolated RPM for the current distance to target, capped at MAX_RPM. */
+  /** Returns the linearly interpolated RPM for the current distance to target, capped at MAX_RPM. */
   public double getLookupRpm() {
-    double distance = getDistanceToTarget();
-    double rpm = interpolateQuadratic(distance, LookupPoint::rpm);
+    double rpm = interpolateLookupValue(getDistanceToTarget(), LookupPoint::rpm);
     return Math.min(rpm, MAX_RPM);
   }
 
-  /** Returns the quadratically interpolated hood angle for the current distance to target. */
+  /** Returns the interpolated hood angle in degrees for the current distance to target. */
   public double getLookupHoodAngle() {
-    return interpolateQuadratic(getDistanceToTarget(), LookupPoint::hoodAngleDegrees);
+    return hoodPercentToAngleDegrees(MathUtil.clamp(getLookupHoodPercent() / 100.0, 0.0, 1.0));
   }
 
   public boolean shouldUseDashboardShotTuning() {
@@ -164,8 +174,16 @@ public class Shooter extends SubsystemBase {
 
   public double getDashboardHoodAngle() {
     double normalizedValue = MathUtil.clamp(dashboardHoodPercent.get() / 100.0, 0.0, 1.0);
+    return hoodPercentToAngleDegrees(normalizedValue);
+  }
+
+  public double getLookupHoodPercent() {
+    return interpolateLookupValue(getDistanceToTarget(), MONOTONIC_HOOD_PERCENTS);
+  }
+
+  private double hoodPercentToAngleDegrees(double normalizedPercent) {
     return HOOD_MAX_ANGLE_DEGREES
-        - normalizedValue * (HOOD_MAX_ANGLE_DEGREES - HOOD_MIN_ANGLE_DEGREES);
+        - normalizedPercent * (HOOD_MAX_ANGLE_DEGREES - HOOD_MIN_ANGLE_DEGREES);
   }
 
   public double getActiveTargetRpm() {
@@ -176,36 +194,61 @@ public class Shooter extends SubsystemBase {
     return shouldUseDashboardShotTuning() ? getDashboardHoodAngle() : getLookupHoodAngle();
   }
 
-  private double interpolateQuadratic(double distance, LookupValueExtractor valueExtractor) {
-    LookupPoint[] interpolationPoints = getClosestLookupPoints(distance);
-    double interpolatedValue = 0.0;
-
-    for (int i = 0; i < interpolationPoints.length; i++) {
-      double xi = interpolationPoints[i].distanceMeters();
-      double yi = valueExtractor.extract(interpolationPoints[i]);
-      double basis = 1.0;
-
-      for (int j = 0; j < interpolationPoints.length; j++) {
-        if (i == j) {
-          continue;
-        }
-
-        double xj = interpolationPoints[j].distanceMeters();
-        basis *= (distance - xj) / (xi - xj);
-      }
-
-      interpolatedValue += yi * basis;
+  private double interpolateLookupValue(double distance, LookupValueExtractor valueExtractor) {
+    if (distance <= SORTED_LOOKUP_POINTS[0].distanceMeters()) {
+      return valueExtractor.extract(SORTED_LOOKUP_POINTS[0]);
     }
 
-    return interpolatedValue;
+    for (int i = 1; i < SORTED_LOOKUP_POINTS.length; i++) {
+      LookupPoint lowerPoint = SORTED_LOOKUP_POINTS[i - 1];
+      LookupPoint upperPoint = SORTED_LOOKUP_POINTS[i];
+      if (distance <= upperPoint.distanceMeters()) {
+        double distanceSpan = upperPoint.distanceMeters() - lowerPoint.distanceMeters();
+        if (distanceSpan <= 0.0) {
+          return valueExtractor.extract(upperPoint);
+        }
+
+        double blend = (distance - lowerPoint.distanceMeters()) / distanceSpan;
+        return MathUtil.interpolate(
+            valueExtractor.extract(lowerPoint), valueExtractor.extract(upperPoint), blend);
+      }
+    }
+
+    return valueExtractor.extract(SORTED_LOOKUP_POINTS[SORTED_LOOKUP_POINTS.length - 1]);
   }
 
-  private LookupPoint[] getClosestLookupPoints(double distance) {
-    return Arrays.stream(LOOKUP_POINTS)
-        .sorted(Comparator.comparingDouble(point -> Math.abs(point.distanceMeters() - distance)))
-        .limit(Math.min(QUADRATIC_POINT_COUNT, LOOKUP_POINTS.length))
-        .sorted(Comparator.comparingDouble(LookupPoint::distanceMeters))
-        .toArray(LookupPoint[]::new);
+  private double interpolateLookupValue(double distance, double[] values) {
+    if (distance <= SORTED_LOOKUP_POINTS[0].distanceMeters()) {
+      return values[0];
+    }
+
+    for (int i = 1; i < SORTED_LOOKUP_POINTS.length; i++) {
+      LookupPoint lowerPoint = SORTED_LOOKUP_POINTS[i - 1];
+      LookupPoint upperPoint = SORTED_LOOKUP_POINTS[i];
+      if (distance <= upperPoint.distanceMeters()) {
+        double distanceSpan = upperPoint.distanceMeters() - lowerPoint.distanceMeters();
+        if (distanceSpan <= 0.0) {
+          return values[i];
+        }
+
+        double blend = (distance - lowerPoint.distanceMeters()) / distanceSpan;
+        return MathUtil.interpolate(values[i - 1], values[i], blend);
+      }
+    }
+
+    return values[values.length - 1];
+  }
+
+  private static double[] buildMonotonicHoodPercents() {
+    double[] monotonicPercents = new double[SORTED_LOOKUP_POINTS.length];
+    double runningPercent = 0.0;
+    for (int i = 0; i < SORTED_LOOKUP_POINTS.length; i++) {
+      // Once hood starts coming in, keep it from dropping back to zero at farther distances.
+      runningPercent =
+          Math.max(runningPercent, MathUtil.clamp(SORTED_LOOKUP_POINTS[i].hoodPercent(), 0.0, 100.0));
+      monotonicPercents[i] = runningPercent;
+    }
+    return monotonicPercents;
   }
 
   /** Applies the lookup-table setpoints based on distance to the current target. */
@@ -263,7 +306,7 @@ public class Shooter extends SubsystemBase {
     shootTarget.setTarget(target, true);
   }
 
-  private static record LookupPoint(double distanceMeters, double rpm, double hoodAngleDegrees) {}
+  private static record LookupPoint(double distanceMeters, double rpm, double hoodPercent) {}
 
   @FunctionalInterface
   private static interface LookupValueExtractor {
