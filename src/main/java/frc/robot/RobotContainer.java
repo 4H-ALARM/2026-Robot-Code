@@ -45,6 +45,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import frc.robot.util.ThrottledRotationalMechanism;
 import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -123,20 +124,19 @@ public class RobotContainer {
             new Shooter(
                 new ShooterIOKraken(),
                 new RotationalMechanism(RotationalMechanism.Config.builder()
-                                        .name("hood")
-                                        .canBus("endEffector")
-                                        .currentLimit(30)
-                                        .motor(ShooterConstants.hoodMotorID)
-                                        .follower(ShooterConstants.hoodMotorFollowerID, true)
-                                        .motorType(MotorType.KRAKEN_X60_FOC)
-                                        .gearRatio(213.3333)
-                                        .pid(1000,0,8)
-                                        .feedforward(0, 20.85)
-                                        .range(-30, 0)
-                                        .statorCurrentLimit(30)
-                                        .startingAngle(0)
-
-                                        .motionMagic(999, 9999, 0).build()),
+                                                    .name("hood")
+                                                    .canBus("endEffector")
+                                                    .currentLimit(30)
+                                                    .motor(ShooterConstants.hoodMotorID)
+                                                    .follower(ShooterConstants.hoodMotorFollowerID, true)
+                                                    .motorType(MotorType.KRAKEN_X60_FOC)
+                                                    .gearRatio(213.3333)
+                                                    .pid(1000,0,8)
+                                                    .feedforward(0, 20.85)
+                                                    .range(-30, 0)
+                                                    .statorCurrentLimit(30)
+                                                    .startingAngle(0)
+                                                    .motionMagic(999, 9999, 0).build()),
                 drive,
                 new IndexerIOKraken(),
                 new PhaseshiftIO(),
@@ -168,13 +168,13 @@ public class RobotContainer {
             new Shooter(
                 new ShooterIOKraken(),
                 new RotationalMechanism(RotationalMechanism.Config.builder()
-                                        .name("hood")
-                                        .canBus("endEffector")
-                                        .currentLimit(30)
-                                        .motor(ShooterConstants.hoodMotorID)
-                                        .follower(ShooterConstants.hoodMotorFollowerID, true)
-                                        .motorType(MotorType.KRAKEN_X60_FOC)
-                                        .pid(1,0,0).build()),
+                                                    .name("hood")
+                                                    .canBus("endEffector")
+                                                    .currentLimit(30)
+                                                    .motor(ShooterConstants.hoodMotorID)
+                                                    .follower(ShooterConstants.hoodMotorFollowerID, true)
+                                                    .motorType(MotorType.KRAKEN_X60_FOC)
+                                                    .pid(1,0,0).build()),
                 drive,
                 new IndexerIOKraken(),
                 new PhaseshiftIO(),
@@ -201,15 +201,15 @@ public class RobotContainer {
             new Shooter(
                 new ShooterIOKraken(),
                 new RotationalMechanism(RotationalMechanism.Config.builder()
-                                        .name("hood")
-                                        .canBus("endEffector")
-                                        .currentLimit(30)
-                                        .motor(ShooterConstants.hoodMotorID)
-                                        .follower(ShooterConstants.hoodMotorFollowerID, true)
-                                        .motorType(MotorType.KRAKEN_X60_FOC)
-                                        .pid(0.5,0,0)
-                                        .motionMagic(99, 99, 0)
-.build()),
+                                                    .name("hood")
+                                                    .canBus("endEffector")
+                                                    .currentLimit(30)
+                                                    .motor(ShooterConstants.hoodMotorID)
+                                                    .follower(ShooterConstants.hoodMotorFollowerID, true)
+                                                    .motorType(MotorType.KRAKEN_X60_FOC)
+                                                    .pid(0.5,0,0)
+                                                    .motionMagic(99, 99, 0)
+                                                    .build()),
                 drive,
                 new IndexerIOKraken(),
                 new PhaseshiftIO(),
@@ -248,7 +248,7 @@ public class RobotContainer {
     ShootFromTowerCommand =
         Commands.runEnd(() -> shooter.spinShooter(1825 / 60), () -> shooter.stopShooter(), shooter);
     NamedCommands.registerCommand("Shoot", autoShootCommand);
-    // NamedCommands.registerCommand("Deploy intake", deployIntakeAuto);
+    NamedCommands.registerCommand("Deploy intake", new DeployIntake(intake));
     NamedCommands.registerCommand("Intake", intakeCommandAuto);
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
