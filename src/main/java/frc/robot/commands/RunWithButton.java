@@ -51,4 +51,12 @@ public class RunWithButton extends Command {
   public boolean isFinished() {
     return m_command.isFinished() || m_button.getAsBoolean() != m_expectedState;
   }
+
+  public static RunWithButton runWhileButtonPressed(Trigger trigger, Command command) {
+    return new RunWithButton(trigger, command, true);
+  }
+
+  public static RunWithButton runWhileButtonReleased(Trigger trigger, Command command) {
+    return new RunWithButton(trigger, command, false);
+  }
 }

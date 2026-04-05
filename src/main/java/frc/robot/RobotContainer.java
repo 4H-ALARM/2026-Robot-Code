@@ -203,7 +203,7 @@ public class RobotContainer {
     indexerReverseCommand =
         Commands.runEnd(() -> shooter.setIndexerSpeed(-6300 / 60), () -> shooter.setIndexerSpeed(0));
     autoShootCommand = AutoShoot.autoShoot(shooter, drive, intake, pilotForwardInput, pilotStrafeInput).withTimeout(4);
-    ShootCommand = AutoShoot.autoShoot(shooter, drive, intake, pilotForwardInput, pilotStrafeInput);
+    ShootCommand = AutoShoot.autoShootWithXLock(shooter, drive, intake, pilotForwardInput, pilotStrafeInput, OperatorController.povRight());
     intakeCommand =
         Commands.runEnd(() -> intake.setIntakeSpeed(-5900 / 60), () -> intake.setIntakeSpeed(0), intake);
     ejectCommand =
