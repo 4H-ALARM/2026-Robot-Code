@@ -26,6 +26,7 @@ public class RunWithButton extends Command {
     m_button = button;
     m_command = command;
     m_expectedState = expectedState;
+    addRequirements(command.getRequirements());
   }
 
   // Called when the command is initially scheduled.
