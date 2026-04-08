@@ -103,13 +103,20 @@ public class RobotContainer {
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
-        drive =
+        // drive =
+        //     new Drive(
+        //         new GyroIOPigeon2(),
+        //         new ModuleIOTalonFX(SwerveConstants.FrontLeft),
+        //         new ModuleIOTalonFX(SwerveConstants.FrontRight),
+        //         new ModuleIOTalonFX(SwerveConstants.BackLeft),
+        //         new ModuleIOTalonFX(SwerveConstants.BackRight));
+         drive =
             new Drive(
-                new GyroIOPigeon2(),
-                new ModuleIOTalonFX(SwerveConstants.FrontLeft),
-                new ModuleIOTalonFX(SwerveConstants.FrontRight),
-                new ModuleIOTalonFX(SwerveConstants.BackLeft),
-                new ModuleIOTalonFX(SwerveConstants.BackRight));
+                new GyroIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {});
 
         vision =
             new Vision(
@@ -263,14 +270,19 @@ public class RobotContainer {
     pilotRightBumper
         .whileTrue(
             Commands.runEnd(() -> shooter.setIndexerSpeed(-5900 / 60), () -> shooter.setIndexerSpeed(0)));
-    pilotRightTrigger
-        .whileTrue(
-            ShootCommand).onFalse(new InstantCommand(() -> shooter.stopShooter()) );
-    pilotLeftTrigger
-        .toggleOnTrue(
-            intakeCommand);
     pilotLeftBumper
-        .onTrue(deployIntake);
+        .whileTrue(
+          Commands.runEnd(
+                () -> shooter.spinShooter(2500/60), () -> shooter.stopShooter())
+        );
+    // pilotRightTrigger
+    //     .whileTrue(
+    //         ShootCommand).onFalse(new InstantCommand(() -> shooter.stopShooter()) );
+    // pilotLeftTrigger
+    //     .toggleOnTrue(
+    //         intakeCommand);
+    // pilotLeftBumper
+    //     .onTrue(deployIntake);
 
     // TODO: this requires the shooter, but would not allow indexer to run from the pilot command.
     OperatorController.rightBumper()
