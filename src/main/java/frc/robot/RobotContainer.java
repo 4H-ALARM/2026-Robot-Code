@@ -97,6 +97,8 @@ public class RobotContainer {
   private final Trigger pilotLeftTrigger = PilotController.leftTrigger();
   private final Trigger pilotLeftBumper = PilotController.leftBumper();
   private final Trigger pilotB = PilotController.b();
+  private final Trigger operatorB = OperatorController.b();
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -201,7 +203,7 @@ public class RobotContainer {
     indexerReverseCommand =
         Commands.runEnd(() -> shooter.setIndexerSpeed(-6300 / 60), () -> shooter.setIndexerSpeed(0));
     autoShootCommand = AutoShoot.autoShoot(shooter, drive, intake, pilotForwardInput, pilotStrafeInput).withTimeout(4);
-    ShootCommand = AutoShoot.autoShoot(shooter, drive, intake, pilotForwardInput, pilotStrafeInput);
+    ShootCommand = AutoShoot.autoShootWithXLock(shooter, drive, intake, pilotForwardInput, pilotStrafeInput, OperatorController.povRight());
     intakeCommand =
         Commands.runEnd(() -> intake.setIntakeSpeed(-5900 / 60), () -> intake.setIntakeSpeed(0), intake);
     ejectCommand =
@@ -218,6 +220,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("Shoot", autoShootCommand);
     NamedCommands.registerCommand("Deploy intake", new DeployIntake(intake));
     NamedCommands.registerCommand("Intake", intakeCommandAuto);
+
+    operatorB.getAsBoolean();
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
