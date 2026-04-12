@@ -201,7 +201,7 @@ public class Shooter extends SubsystemBase {
     return shouldUseDashboardShotTuning() ? getDashboardHoodAngle() : getLookupHoodAngle();
   }
   public double getHoodAngle() {
-    return 67.7 + hood.getAngle();
+    return 62 + hood.getAngle();
   }
 
   private double interpolateLookupValue(double distance, LookupValueExtractor valueExtractor) {
@@ -285,7 +285,7 @@ public class Shooter extends SubsystemBase {
     if (Double.isNaN(lastCommandedHoodAngleDegrees)
         || Math.abs(lastCommandedHoodAngleDegrees - hoodAngle) > HOOD_COMMAND_EPSILON_DEGREES
         && hoodAngle > ShooterConstants.minHoodAngle && hoodAngle < ShooterConstants.maxHoodAngle) {
-      CommandScheduler.getInstance().schedule(hood.goTo(hoodAngle - 67.7/*mechanical maximum for hood angle */));
+      CommandScheduler.getInstance().schedule(hood.goTo(hoodAngle - 62/*mechanical maximum for hood angle */));
       lastCommandedHoodAngleDegrees = hoodAngle;
     }
   }
