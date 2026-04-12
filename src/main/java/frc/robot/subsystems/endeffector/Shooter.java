@@ -107,7 +107,7 @@ public class Shooter extends SubsystemBase {
                                                     .feedforward(0, 20.85)
                                                     .range(HOOD_MIN_ANGLE_DEGREES, HOOD_MAX_ANGLE_DEGREES)
                                                     .statorCurrentLimit(30)
-                                                    .startingAngle(hoodEncoder.getAbsolutePosition().getValueAsDouble())
+                                                    .startingAngle(0)
                                                     .motionMagic(999, 9999, 0).build());
 
 

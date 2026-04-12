@@ -265,7 +265,8 @@ public class RobotContainer {
             Commands.runEnd(() -> shooter.setIndexerSpeed(-5900 / 60), () -> shooter.setIndexerSpeed(0)));
     pilotRightTrigger
         .whileTrue(
-            ShootCommand).onFalse(new InstantCommand(() -> shooter.stopShooter()) );
+            Commands.runEnd(() -> shooter.spinShooter(1840/ 60), () -> shooter.stopShooter(), shooter))
+        .onTrue(new InstantCommand(() -> shooter.setHoodAngle(67.12)));
     pilotLeftTrigger
         .toggleOnTrue(
             intakeCommand);
