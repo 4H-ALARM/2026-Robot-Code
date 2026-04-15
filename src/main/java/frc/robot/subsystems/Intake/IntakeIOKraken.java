@@ -8,6 +8,7 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
@@ -39,7 +40,7 @@ public class IntakeIOKraken implements IntakeIO {
   private final VelocityTorqueCurrentFOC m_requestedVelocity;
   private final Follower followercontrol;
   private final Follower rotationFollowerControl;
-  private final MotionMagicVoltage m_requestedPosition;
+  private final DynamicMotionMagicVoltage m_requestedPosition;
   private double m_requestedAngleDegrees = 0.0;
   private final StatusSignal<Angle> m_rotationPosition;
   private final StatusSignal<AngularVelocity> m_rotationVelocity;
@@ -100,7 +101,7 @@ public class IntakeIOKraken implements IntakeIO {
     m_rotationMotorFollow.getConfigurator().apply(m_rotationMotorConfig);
     m_intakingMotor.getConfigurator().apply(m_intakingMotorConfig);
     m_intakingMotorFollow.getConfigurator().apply(m_intakingMotorConfig);
-    m_requestedPosition = new MotionMagicVoltage(0).withSlot(0);
+    m_requestedPosition = new DynamicMotionMagicVoltage(0, IntakeConstants.angleMotionMagicCruiseVelocityDegreesPerSecond, IntakeConstants.angleMotionMagicAccelerationDegreesPerSecondSquared);
     m_requestedVelocity = new VelocityTorqueCurrentFOC(0).withSlot(0);
     followercontrol = new Follower(IntakeConstants.intakingMotorID, MotorAlignmentValue.Opposed);
     rotationFollowerControl =
@@ -186,6 +187,15 @@ public class IntakeIOKraken implements IntakeIO {
           },
           rotationGearRatio);
     }
+  }
+
+  public void jostleIntake() {
+    m_requestedPosition.Velocity = IntakeConstants.jostleIntakeVelocity;
+    setAngle(IntakeConstants.rotationUpDegrees + 15);
+  }
+
+  public void resetMotionMagic() {
+    m_requestedPosition.Velocity = IntakeConstants.angleMotionMagicCruiseVelocityDegreesPerSecond;
   }
 
   public void updateInputs(IntakeIOInputs inputs) {
