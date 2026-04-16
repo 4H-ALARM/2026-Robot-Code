@@ -51,17 +51,16 @@ public class RunEndEffector extends Command {
 
     m_shooter.spinShooterFromLookup();
     m_shooter.stopIndexer();
-    m_intake.setIntakeSpeed(-5900 / 60);
+    //m_shooter.setIndexerSpeed(m_indexerSpeed);
+    // m_intake.setIntakeSpeed(-5900 / 60);
   }
 
   private void initializeJostle(){
     m_shouldJostle = m_intake.shouldJostleOnShoot();
     if(m_shouldJostle) {
-      m_intakeMotionState = IntakeMotionState.MOVING_TO_HALF;
-      commandIntakeAngle(INTAKE_HALF_RETRACT_DEGREES);
-      m_phaseTimer.restart();
+      m_intake.jostleIntake();
     } else {
-      m_intakeMotionState = IntakeMotionState.STAY_DOWN;
+      m_intake.resetMotionMagic();
       m_intake.setRotationDown();
     }
   }
@@ -74,14 +73,14 @@ public class RunEndEffector extends Command {
     }
 
     m_shooter.spinShooterFromLookup();
-    updateIntakeMotion();
 
-    if (m_shooter.isShooterAtTargetVelocity()) {
+
+    if (m_shooter.isShooterReadyToStartIndexer()) {
       m_shooter.setIndexerSpeed(m_indexerSpeed);
     } else {
-      m_shooter.setIndexerSpeed(m_indexerSpeed / 6);
+     // m_shooter.stopIndexer();
     }
-    
+
 
   }
 
@@ -92,6 +91,7 @@ public class RunEndEffector extends Command {
     m_shooter.stopShooter();
     m_shooter.stopIndexer();
     m_intake.stopIntake();
+    m_intake.resetMotionMagic();
     m_intake.setRotationDown();
   }
 

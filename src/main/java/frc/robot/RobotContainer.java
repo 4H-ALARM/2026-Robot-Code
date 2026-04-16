@@ -116,8 +116,8 @@ public class RobotContainer {
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVision(camera0Name, backLeft),
                 new VisionIOPhotonVision(camera1Name, backRight),
-                new VisionIOPhotonVision(camera2Name, sideLeft),
-                new VisionIOPhotonVision(camera3Name, sideRight)
+                new VisionIOPhotonVision(camera2Name, sideLeft)//,
+                // new VisionIOPhotonVision(camera3Name, sideRight)
                 );
 
         shooter =
@@ -200,7 +200,7 @@ public class RobotContainer {
             drive, pilotForwardInput, pilotStrafeInput, pilotRotateInput);
     indexerReverseCommand =
         Commands.runEnd(() -> shooter.setIndexerSpeed(-6300 / 60), () -> shooter.setIndexerSpeed(0));
-    autoShootCommand = AutoShoot.autoShoot(shooter, drive, intake, pilotForwardInput, pilotStrafeInput).withTimeout(4);
+    autoShootCommand = AutoShoot.autoShoot(shooter, drive, intake, pilotForwardInput, pilotStrafeInput).withTimeout(3.85);
     ShootCommand = AutoShoot.autoShoot(shooter, drive, intake, pilotForwardInput, pilotStrafeInput);
     intakeCommand =
         Commands.runEnd(() -> intake.setIntakeSpeed(-5900 / 60), () -> intake.setIntakeSpeed(0), intake);
