@@ -16,6 +16,7 @@ import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.units.measure.Angle;
@@ -97,6 +98,7 @@ public class IntakeIOKraken implements IntakeIO {
         IntakeConstants.angleMotionMagicJerkDegreesPerSecondCubed / 360.0;
     m_intakingMotorConfig.Slot0 = m_intakingPIDConfigs;
     m_rotationMotorConfig.Feedback.SensorToMechanismRatio = rotationGearRatio.get();
+    m_rotationMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     m_rotationMotor.getConfigurator().apply(m_rotationMotorConfig);
     m_rotationMotorFollow.getConfigurator().apply(m_rotationMotorConfig);
     m_intakingMotor.getConfigurator().apply(m_intakingMotorConfig);

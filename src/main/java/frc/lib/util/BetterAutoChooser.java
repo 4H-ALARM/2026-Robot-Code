@@ -34,8 +34,8 @@ public class BetterAutoChooser {
       if (name.startsWith(FLIP_PREFIX)) {
         // Make the flipped paths
         String remainder = name.substring(FLIP_PREFIX.length());
-        registerAuto("Right " + remainder + " (Generated)", new PathPlannerAuto(name, RIGHT_IS_FLIPPED));
-        registerAuto("Left " + remainder + " (Generated)", new PathPlannerAuto(name, !RIGHT_IS_FLIPPED));
+        registerAuto("Right" + remainder + " (Generated)", new PathPlannerAuto(name, RIGHT_IS_FLIPPED));
+        registerAuto("Left" + remainder + " (Generated)", new PathPlannerAuto(name, !RIGHT_IS_FLIPPED));
       } else {
         registerAuto(name, new PathPlannerAuto(name));
       }
