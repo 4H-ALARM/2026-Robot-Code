@@ -45,7 +45,7 @@ public class IndexerIOKraken implements IndexerIO {
     m_configurator = new TalonFXConfiguration();
     m_configurator.Slot0 = m_slot0Configs;
     m_configurator.CurrentLimits = new CurrentLimitsConfigs()
-      .withStatorCurrentLimit(50)
+      .withStatorCurrentLimit(80)
       .withStatorCurrentLimitEnable(true)
       .withSupplyCurrentLimit(50)
       .withSupplyCurrentLimitEnable(true);
