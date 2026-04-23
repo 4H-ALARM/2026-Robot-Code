@@ -204,9 +204,9 @@ public class RobotContainer {
         Commands.runEnd(() -> shooter.setIndexerSpeed(-6300 / 60), () -> shooter.setIndexerSpeed(0));
     // autoShootCommand = AutoShoot.autoShoot(shooter, drive, intake, pilotForwardInput, pilotStrafeInput).withTimeout(3.85);
     // ShootCommand = AutoShoot.autoShoot(shooter, drive, intake, pilotForwardInput, pilotStrafeInput);
-    ShootCommand = new ShootBall(shooter, intake, -5900, 1500);
+    ShootCommand = new ShootBall(shooter, intake, -3000, 1500);
     intakeCommand =
-        Commands.runEnd(() -> intake.setIntakeSpeed(-5900 / 60), () -> intake.setIntakeSpeed(0), intake);
+        Commands.runEnd(() -> intake.setIntakeSpeed(-2000 / 60), () -> intake.setIntakeSpeed(0), intake);
     ejectCommand =
         Commands.runEnd(() -> intake.setIntakeSpeed(5900 / 60), () -> intake.setIntakeSpeed(0), intake);
     intakeCommandAuto =
