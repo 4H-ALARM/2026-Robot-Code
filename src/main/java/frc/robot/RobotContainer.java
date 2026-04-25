@@ -29,6 +29,7 @@ import frc.robot.commands.DeployIntake;
 import frc.robot.commands.AutoShoot;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.SelectTarget;
+import frc.robot.commands.ShootBall;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIOKraken;
 import frc.robot.subsystems.drive.Drive;
@@ -78,7 +79,7 @@ public class RobotContainer {
 //   private final DeployIntake deployIntakeAuto;
   private final Command driveDefaultCommand;
   private final Command indexerReverseCommand;
-  private final Command autoShootCommand;
+//   private final Command autoShootCommand;
   private final Command intakeCommand;
   private final Command ejectCommand;
   private final Command intakeCommandAuto;
@@ -89,9 +90,9 @@ public class RobotContainer {
 
   private final LoggedDashboardChooser<Command> autoChooser;
 
-  private final DoubleSupplier pilotForwardInput = () -> -PilotController.getLeftY();
-  private final DoubleSupplier pilotStrafeInput = () -> -PilotController.getLeftX();
-  private final DoubleSupplier pilotRotateInput = () -> -PilotController.getRightX();
+  private final DoubleSupplier pilotForwardInput = () -> -PilotController.getLeftY()*0.25;
+  private final DoubleSupplier pilotStrafeInput = () -> -PilotController.getLeftX()*0.25;
+  private final DoubleSupplier pilotRotateInput = () -> -PilotController.getRightX()*0.25;
 
   private final Trigger pilotRightBumper = PilotController.rightBumper();
   private final Trigger pilotRightTrigger = PilotController.rightTrigger();
@@ -201,10 +202,11 @@ public class RobotContainer {
             drive, pilotForwardInput, pilotStrafeInput, pilotRotateInput);
     indexerReverseCommand =
         Commands.runEnd(() -> shooter.setIndexerSpeed(-6300 / 60), () -> shooter.setIndexerSpeed(0));
-    autoShootCommand = AutoShoot.autoShoot(shooter, drive, intake, pilotForwardInput, pilotStrafeInput).withTimeout(3.85);
-    ShootCommand = AutoShoot.autoShoot(shooter, drive, intake, pilotForwardInput, pilotStrafeInput);
+    // autoShootCommand = AutoShoot.autoShoot(shooter, drive, intake, pilotForwardInput, pilotStrafeInput).withTimeout(3.85);
+    // ShootCommand = AutoShoot.autoShoot(shooter, drive, intake, pilotForwardInput, pilotStrafeInput);
+    ShootCommand = new ShootBall(shooter, intake, -3000, 1000);
     intakeCommand =
-        Commands.runEnd(() -> intake.setIntakeSpeed(-5900 / 60), () -> intake.setIntakeSpeed(0), intake);
+        Commands.runEnd(() -> intake.setIntakeSpeed(-2000 / 60), () -> intake.setIntakeSpeed(0), intake);
     ejectCommand =
         Commands.runEnd(() -> intake.setIntakeSpeed(5900 / 60), () -> intake.setIntakeSpeed(0), intake);
     intakeCommandAuto =
@@ -216,7 +218,7 @@ public class RobotContainer {
             .ignoringDisable(true);
     ShootFromTowerCommand =
         Commands.runEnd(() -> shooter.spinShooter(1955 / 60), () -> shooter.stopShooter(), shooter);
-    NamedCommands.registerCommand("Shoot", autoShootCommand);
+    // NamedCommands.registerCommand("Shoot", autoShootCommand);
     NamedCommands.registerCommand("Deploy intake", new DeployIntake(intake));
     NamedCommands.registerCommand("Intake", intakeCommandAuto);
 
@@ -266,7 +268,11 @@ public class RobotContainer {
             Commands.runEnd(() -> shooter.setIndexerSpeed(-5900 / 60), () -> shooter.setIndexerSpeed(0)));
     pilotRightTrigger
         .whileTrue(
-            ShootCommand).onFalse(new InstantCommand(() -> shooter.stopShooter()) );
+            ShootCommand)
+        .onFalse(
+            new InstantCommand(() -> shooter.stopShooter()) )
+        .onTrue(
+            new InstantCommand(() -> shooter.setHoodAngle(0)));
     pilotLeftTrigger
         .toggleOnTrue(
             intakeCommand);
