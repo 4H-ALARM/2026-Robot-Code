@@ -204,7 +204,7 @@ public class RobotContainer {
         Commands.runEnd(() -> shooter.setIndexerSpeed(-6300 / 60), () -> shooter.setIndexerSpeed(0));
     // autoShootCommand = AutoShoot.autoShoot(shooter, drive, intake, pilotForwardInput, pilotStrafeInput).withTimeout(3.85);
     // ShootCommand = AutoShoot.autoShoot(shooter, drive, intake, pilotForwardInput, pilotStrafeInput);
-    ShootCommand = new ShootBall(shooter, intake, -3000, 1500);
+    ShootCommand = new ShootBall(shooter, intake, -3000, 1000);
     intakeCommand =
         Commands.runEnd(() -> intake.setIntakeSpeed(-2000 / 60), () -> intake.setIntakeSpeed(0), intake);
     ejectCommand =
@@ -268,7 +268,11 @@ public class RobotContainer {
             Commands.runEnd(() -> shooter.setIndexerSpeed(-5900 / 60), () -> shooter.setIndexerSpeed(0)));
     pilotRightTrigger
         .whileTrue(
-            ShootCommand).onFalse(new InstantCommand(() -> shooter.stopShooter()) );
+            ShootCommand)
+        .onFalse(
+            new InstantCommand(() -> shooter.stopShooter()) )
+        .onTrue(
+            new InstantCommand(() -> shooter.setHoodAngle(0)));
     pilotLeftTrigger
         .toggleOnTrue(
             intakeCommand);
